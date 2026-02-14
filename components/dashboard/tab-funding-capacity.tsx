@@ -8,6 +8,7 @@ import {
   CartesianGrid,
   Legend,
   ResponsiveContainer,
+  Tooltip,
 } from "recharts"
 import {
   PanelCard,
@@ -16,6 +17,7 @@ import {
   TotalRow,
   FundingBar,
 } from "./panel-components"
+import { ChartTooltip } from "./chart-tooltip"
 import { Clock } from "lucide-react"
 
 /* -------------------------------------------------- */
@@ -112,30 +114,10 @@ export function FundingCapacityTab() {
             Total Contingent Funding
           </PanelCardTitle>
           <div className="mt-3">
-            <FundingBar
-              label="FHLB"
-              value="$850M"
-              width="26%"
-              color="hsl(152,55%,41%)"
-            />
-            <FundingBar
-              label="Fed DW"
-              value="$1.5B"
-              width="47%"
-              color="hsl(217,91%,60%)"
-            />
-            <FundingBar
-              label="Repo"
-              value="$620M"
-              width="19%"
-              color="hsl(263,70%,50%)"
-            />
-            <FundingBar
-              label="Credit Lines"
-              value="$350M"
-              width="8%"
-              color="hsl(25,95%,53%)"
-            />
+            <FundingBar label="FHLB" value="$850M" width="26%" color="hsl(152,55%,41%)" />
+            <FundingBar label="Fed DW" value="$1.5B" width="47%" color="hsl(217,91%,60%)" />
+            <FundingBar label="Repo" value="$620M" width="19%" color="hsl(263,70%,50%)" />
+            <FundingBar label="Credit Lines" value="$350M" width="8%" color="hsl(25,95%,53%)" />
           </div>
           <TotalRow label="Total Contingent Funding" value="$3.32B" valueClass="text-status-green" />
         </PanelCard>
@@ -150,21 +132,11 @@ export function FundingCapacityTab() {
                 <XAxis dataKey="day" tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
                 <YAxis domain={[0, 10]} tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(220,13%,91%)" />
-                <Legend
-                  verticalAlign="top"
-                  height={36}
-                  wrapperStyle={{ fontSize: 11, color: "#64748b" }}
-                />
-                <Line dataKey="base" name="Base Case ($B)" stroke="hsl(152,55%,41%)" strokeWidth={2} />
-                <Line dataKey="stress" name="Stress Case ($B)" stroke="hsl(25,95%,53%)" strokeWidth={2} />
-                <Line
-                  dataKey="threshold"
-                  name="Minimum Threshold"
-                  stroke="hsl(0,84%,60%)"
-                  strokeWidth={2}
-                  strokeDasharray="5 5"
-                  dot={false}
-                />
+                <Tooltip content={<ChartTooltip formatter={(v) => `$${v}B`} />} />
+                <Legend verticalAlign="top" height={36} wrapperStyle={{ fontSize: 11, color: "#64748b" }} />
+                <Line dataKey="base" name="Base Case" stroke="hsl(152,55%,41%)" strokeWidth={2} />
+                <Line dataKey="stress" name="Stress Case" stroke="hsl(25,95%,53%)" strokeWidth={2} />
+                <Line dataKey="threshold" name="Min Threshold" stroke="hsl(0,84%,60%)" strokeWidth={2} strokeDasharray="5 5" dot={false} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -181,13 +153,8 @@ export function FundingCapacityTab() {
         </h3>
         <div className="space-y-0">
           {actions.map((action, i) => (
-            <div
-              key={i}
-              className="flex items-start gap-3 py-3 border-b border-border/60 last:border-b-0"
-            >
-              <div
-                className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${action.iconBg} ${action.iconColor}`}
-              >
+            <div key={i} className="flex items-start gap-3 py-3 border-b border-border/60 last:border-b-0">
+              <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${action.iconBg} ${action.iconColor}`}>
                 {action.icon}
               </div>
               <div>

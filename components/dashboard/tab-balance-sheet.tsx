@@ -12,6 +12,7 @@ import {
   ResponsiveContainer,
   AreaChart,
   Area,
+  Tooltip,
 } from "recharts"
 import {
   PanelCard,
@@ -21,6 +22,7 @@ import {
   TotalRow,
   MaturityTag,
 } from "./panel-components"
+import { ChartTooltip } from "./chart-tooltip"
 
 /* -------------------------------------------------- */
 /*  Chart data                                        */
@@ -128,7 +130,8 @@ export function BalanceSheetTab() {
                 <XAxis dataKey="month" tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
                 <YAxis domain={[41, 46]} tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(220,13%,91%)" />
-                <Area dataKey="deposits" stroke="hsl(25,95%,53%)" fill="hsl(25,95%,53%)" fillOpacity={0.1} strokeWidth={2} />
+                <Tooltip content={<ChartTooltip formatter={(v) => `$${v}B`} />} />
+                <Area dataKey="deposits" name="Deposits" stroke="hsl(25,95%,53%)" fill="hsl(25,95%,53%)" fillOpacity={0.1} strokeWidth={2} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -155,17 +158,15 @@ export function BalanceSheetTab() {
                 <XAxis dataKey="channel" tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(220,13%,91%)" />
+                <Tooltip content={<ChartTooltip formatter={(v) => `$${v}M`} />} />
                 <Bar
                   dataKey="flow"
+                  name="Net Flow"
                   radius={[4, 4, 0, 0]}
                   fill="#ef4444"
                   shape={(props: Record<string, unknown>) => {
                     const { x, y, width, height, payload } = props as {
-                      x: number
-                      y: number
-                      width: number
-                      height: number
-                      payload: { flow: number }
+                      x: number; y: number; width: number; height: number; payload: { flow: number }
                     }
                     const color = payload.flow >= 0 ? "hsl(152,55%,41%)" : "hsl(0,84%,60%)"
                     return <rect x={x} y={y} width={width} height={height} fill={color} rx={4} />
@@ -185,17 +186,15 @@ export function BalanceSheetTab() {
                 <XAxis dataKey="segment" tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(220,13%,91%)" />
+                <Tooltip content={<ChartTooltip formatter={(v) => `$${v}M`} />} />
                 <Bar
                   dataKey="flow"
+                  name="Net Flow"
                   radius={[4, 4, 0, 0]}
                   fill="#ef4444"
                   shape={(props: Record<string, unknown>) => {
                     const { x, y, width, height, payload } = props as {
-                      x: number
-                      y: number
-                      width: number
-                      height: number
-                      payload: { flow: number }
+                      x: number; y: number; width: number; height: number; payload: { flow: number }
                     }
                     const color = payload.flow >= 0 ? "hsl(152,55%,41%)" : "hsl(0,84%,60%)"
                     return <rect x={x} y={y} width={width} height={height} fill={color} rx={4} />
@@ -224,6 +223,7 @@ export function BalanceSheetTab() {
                 tickFormatter={(v) => `${v}%`}
               />
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(220,13%,91%)" />
+              <Tooltip content={<ChartTooltip formatter={(v, n) => n.includes("Limit") ? `${v}%` : `${v}%`} />} />
               <Legend
                 verticalAlign="top"
                 height={36}

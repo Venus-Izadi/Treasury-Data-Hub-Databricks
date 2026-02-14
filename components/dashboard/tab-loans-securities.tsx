@@ -7,6 +7,7 @@ import {
   YAxis,
   CartesianGrid,
   ResponsiveContainer,
+  Tooltip,
 } from "recharts"
 import {
   PanelCard,
@@ -17,6 +18,7 @@ import {
   HqlaTag,
   FundingBar,
 } from "./panel-components"
+import { ChartTooltip } from "./chart-tooltip"
 
 /* -------------------------------------------------- */
 /*  Chart data                                        */
@@ -70,16 +72,14 @@ export function LoansSecuritiesTab() {
                 <XAxis dataKey="bucket" tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(220,13%,91%)" />
+                <Tooltip content={<ChartTooltip formatter={(v) => `$${v}B`} />} />
                 <Bar
                   dataKey="amount"
+                  name="Amount"
                   radius={[4, 4, 0, 0]}
                   shape={(props: Record<string, unknown>) => {
                     const { x, y, width, height, payload } = props as {
-                      x: number
-                      y: number
-                      width: number
-                      height: number
-                      payload: { color: string }
+                      x: number; y: number; width: number; height: number; payload: { color: string }
                     }
                     return <rect x={x} y={y} width={width} height={height} fill={payload.color} rx={4} />
                   }}
@@ -162,24 +162,9 @@ export function LoansSecuritiesTab() {
             HQLA Composition (After Haircuts)
           </PanelCardTitle>
           <div className="mt-3">
-            <FundingBar
-              label="Level 1"
-              value="$3.1B"
-              width="65%"
-              color="hsl(152,55%,41%)"
-            />
-            <FundingBar
-              label="Level 2A"
-              value="$1.3B"
-              width="27%"
-              color="hsl(217,91%,60%)"
-            />
-            <FundingBar
-              label="Level 2B"
-              value="$0.4B"
-              width="8%"
-              color="hsl(25,95%,53%)"
-            />
+            <FundingBar label="Level 1" value="$3.1B" width="65%" color="hsl(152,55%,41%)" />
+            <FundingBar label="Level 2A" value="$1.3B" width="27%" color="hsl(217,91%,60%)" />
+            <FundingBar label="Level 2B" value="$0.4B" width="8%" color="hsl(25,95%,53%)" />
           </div>
           <TotalRow label="Total HQLA" value="$4.8B" />
         </PanelCard>
