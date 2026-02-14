@@ -51,7 +51,6 @@ const config: Config = {
           '4': 'hsl(var(--chart-4))',
           '5': 'hsl(var(--chart-5))',
         },
-        'databank-gold': 'hsl(var(--databank-gold))',
         'status-green': 'hsl(var(--status-green))',
         'status-yellow': 'hsl(var(--status-yellow))',
         'status-red': 'hsl(var(--status-red))',
@@ -71,20 +70,10 @@ const config: Config = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
         },
-        ticker: {
-          '0%': { transform: 'translateX(0)' },
-          '100%': { transform: 'translateX(-50%)' },
-        },
-        'pulse-dot': {
-          '0%, 100%': { opacity: '1', transform: 'scale(1)' },
-          '50%': { opacity: '0.5', transform: 'scale(1.2)' },
-        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        ticker: 'ticker 50s linear infinite',
-        'pulse-dot': 'pulse-dot 1.5s infinite',
       },
     },
   },

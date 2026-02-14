@@ -94,7 +94,7 @@ export function BalanceSheetTab() {
           <DataRow label="CDs 90d-1yr" value="$4.1B" />
           <DataRow label="CDs >1yr" value="$2.5B" />
           <DataRow label="Brokered Deposits" value="$4.2B" valueClass="text-status-yellow" />
-          <TotalRow label="Total Deposits" value="$42.5B" valueClass="text-primary-foreground" />
+          <TotalRow label="Total Deposits" value="$42.5B" />
         </PanelCard>
 
         {/* Insurance & Concentration */}
@@ -125,9 +125,10 @@ export function BalanceSheetTab() {
           <div className="h-[180px] mt-4">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={depositTrendData}>
-                <XAxis dataKey="month" tick={{ fill: "#94a3b8", fontSize: 12 }} axisLine={false} tickLine={false} />
-                <YAxis domain={[41, 46]} tick={{ fill: "#94a3b8", fontSize: 12 }} axisLine={false} tickLine={false} />
-                <Area dataKey="deposits" stroke="#c9a227" fill="rgba(201,162,39,0.1)" strokeWidth={2} />
+                <XAxis dataKey="month" tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
+                <YAxis domain={[41, 46]} tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(220,13%,91%)" />
+                <Area dataKey="deposits" stroke="hsl(25,95%,53%)" fill="hsl(25,95%,53%)" fillOpacity={0.1} strokeWidth={2} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -151,9 +152,9 @@ export function BalanceSheetTab() {
           <div className="h-[180px] mt-4">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={channelFlowData}>
-                <XAxis dataKey="channel" tick={{ fill: "#94a3b8", fontSize: 12 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: "#94a3b8", fontSize: 12 }} axisLine={false} tickLine={false} />
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <XAxis dataKey="channel" tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(220,13%,91%)" />
                 <Bar
                   dataKey="flow"
                   radius={[4, 4, 0, 0]}
@@ -166,7 +167,7 @@ export function BalanceSheetTab() {
                       height: number
                       payload: { flow: number }
                     }
-                    const color = payload.flow >= 0 ? "#22c55e" : "#ef4444"
+                    const color = payload.flow >= 0 ? "hsl(152,55%,41%)" : "hsl(0,84%,60%)"
                     return <rect x={x} y={y} width={width} height={height} fill={color} rx={4} />
                   }}
                 />
@@ -181,9 +182,9 @@ export function BalanceSheetTab() {
           <div className="h-[180px] mt-4">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={segmentFlowData}>
-                <XAxis dataKey="segment" tick={{ fill: "#94a3b8", fontSize: 12 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: "#94a3b8", fontSize: 12 }} axisLine={false} tickLine={false} />
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <XAxis dataKey="segment" tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(220,13%,91%)" />
                 <Bar
                   dataKey="flow"
                   radius={[4, 4, 0, 0]}
@@ -196,7 +197,7 @@ export function BalanceSheetTab() {
                       height: number
                       payload: { flow: number }
                     }
-                    const color = payload.flow >= 0 ? "#22c55e" : "#ef4444"
+                    const color = payload.flow >= 0 ? "hsl(152,55%,41%)" : "hsl(0,84%,60%)"
                     return <rect x={x} y={y} width={width} height={height} fill={color} rx={4} />
                   }}
                 />
@@ -214,25 +215,25 @@ export function BalanceSheetTab() {
         <div className="h-[180px] mt-4">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={uninsuredTrendData}>
-              <XAxis dataKey="date" tick={{ fill: "#94a3b8", fontSize: 12 }} axisLine={false} tickLine={false} />
+              <XAxis dataKey="date" tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
               <YAxis
                 domain={[25, 40]}
-                tick={{ fill: "#94a3b8", fontSize: 12 }}
+                tick={{ fill: "#64748b", fontSize: 12 }}
                 axisLine={false}
                 tickLine={false}
                 tickFormatter={(v) => `${v}%`}
               />
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(220,13%,91%)" />
               <Legend
                 verticalAlign="top"
                 height={36}
-                wrapperStyle={{ fontSize: 12, color: "#94a3b8" }}
+                wrapperStyle={{ fontSize: 12, color: "#64748b" }}
               />
-              <Area dataKey="uninsured" name="Uninsured %" stroke="#f59e0b" fill="rgba(245,158,11,0.1)" strokeWidth={2} />
+              <Area dataKey="uninsured" name="Uninsured %" stroke="hsl(25,95%,53%)" fill="hsl(25,95%,53%)" fillOpacity={0.08} strokeWidth={2} />
               <Line
                 dataKey="limit"
                 name="Policy Limit"
-                stroke="#ef4444"
+                stroke="hsl(0,84%,60%)"
                 strokeWidth={2}
                 strokeDasharray="5 5"
                 dot={false}

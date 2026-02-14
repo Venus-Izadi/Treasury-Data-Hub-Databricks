@@ -38,19 +38,22 @@ const ilstData = [
 
 const actions = [
   {
-    iconClass: "bg-[rgba(139,92,246,0.2)] text-[#a78bfa]",
+    iconBg: "bg-status-yellow/10",
+    iconColor: "text-status-yellow",
     icon: "$",
     text: "Adjust deposit pricing strategy - uninsured deposits at 32% approaching 35% policy limit",
     trigger: "Trigger: Uninsured % or concentration exceeds internal policy limits",
   },
   {
-    iconClass: "bg-status-green/20 text-status-green",
+    iconBg: "bg-status-green/10",
+    iconColor: "text-status-green",
     icon: "H",
     text: "Consider HQLA sales or short-term FHLB advance - ILST projections show tighter liquidity in 5-7 days under stress",
     trigger: "Trigger: ILST projections show tight liquidity within 5-7 day horizon",
   },
   {
-    iconClass: "bg-status-blue/20 text-status-blue",
+    iconBg: "bg-status-blue/10",
+    iconColor: "text-status-blue",
     icon: "F",
     text: "Monitor loan pipeline and adjust funding mix - consider term FHLB funding instead of growing rate-sensitive deposits",
     trigger: "Trigger: Loan pipeline growth with deposit outflows or rising cost of funds",
@@ -75,7 +78,7 @@ export function FundingCapacityTab() {
           <DataRow label="Collateral Coverage" value="168%" />
           <DataRow label="Wtd Avg Cost" value="5.20%" />
           <DataRow label="Avg Maturity" value="45 days" />
-          <TotalRow label="Available Capacity" value="$850M" />
+          <TotalRow label="Available Capacity" value="$850M" valueClass="text-status-green" />
         </PanelCard>
 
         <PanelCard>
@@ -87,7 +90,7 @@ export function FundingCapacityTab() {
           <DataRow label="Secondary Credit" value="6.00%" />
           <DataRow label="Last Accessed" value="Never" />
           <DataRow label="Readiness Status" value="Operational" valueClass="text-status-green" />
-          <TotalRow label="Borrowing Capacity" value="$1.5B" />
+          <TotalRow label="Borrowing Capacity" value="$1.5B" valueClass="text-status-green" />
         </PanelCard>
 
         <PanelCard>
@@ -98,7 +101,7 @@ export function FundingCapacityTab() {
           <DataRow label="Repo Outstanding" value="$0" />
           <DataRow label="Correspondent Lines" value="$250M" valueClass="text-status-green" />
           <DataRow label="Uncommitted Facilities" value="$100M" />
-          <TotalRow label="Total Lines" value="$970M" valueClass="text-primary-foreground" />
+          <TotalRow label="Total Lines" value="$970M" />
         </PanelCard>
       </div>
 
@@ -113,28 +116,28 @@ export function FundingCapacityTab() {
               label="FHLB"
               value="$850M"
               width="26%"
-              gradient="linear-gradient(90deg,#22c55e,#16a34a)"
+              color="hsl(152,55%,41%)"
             />
             <FundingBar
               label="Fed DW"
               value="$1.5B"
               width="47%"
-              gradient="linear-gradient(90deg,#3b82f6,#2563eb)"
+              color="hsl(217,91%,60%)"
             />
             <FundingBar
               label="Repo"
               value="$620M"
               width="19%"
-              gradient="linear-gradient(90deg,#8b5cf6,#7c3aed)"
+              color="hsl(263,70%,50%)"
             />
             <FundingBar
               label="Credit Lines"
               value="$350M"
               width="8%"
-              gradient="linear-gradient(90deg,#f59e0b,#d97706)"
+              color="hsl(25,95%,53%)"
             />
           </div>
-          <TotalRow label="Total Contingent Funding" value="$3.32B" />
+          <TotalRow label="Total Contingent Funding" value="$3.32B" valueClass="text-status-green" />
         </PanelCard>
 
         <PanelCard>
@@ -144,20 +147,20 @@ export function FundingCapacityTab() {
           <div className="h-[180px] mt-4">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={ilstData}>
-                <XAxis dataKey="day" tick={{ fill: "#94a3b8", fontSize: 12 }} axisLine={false} tickLine={false} />
-                <YAxis domain={[0, 10]} tick={{ fill: "#94a3b8", fontSize: 12 }} axisLine={false} tickLine={false} />
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <XAxis dataKey="day" tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
+                <YAxis domain={[0, 10]} tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(220,13%,91%)" />
                 <Legend
                   verticalAlign="top"
                   height={36}
-                  wrapperStyle={{ fontSize: 11, color: "#94a3b8" }}
+                  wrapperStyle={{ fontSize: 11, color: "#64748b" }}
                 />
-                <Line dataKey="base" name="Base Case ($B)" stroke="#22c55e" strokeWidth={2} />
-                <Line dataKey="stress" name="Stress Case ($B)" stroke="#f59e0b" strokeWidth={2} />
+                <Line dataKey="base" name="Base Case ($B)" stroke="hsl(152,55%,41%)" strokeWidth={2} />
+                <Line dataKey="stress" name="Stress Case ($B)" stroke="hsl(25,95%,53%)" strokeWidth={2} />
                 <Line
                   dataKey="threshold"
                   name="Minimum Threshold"
-                  stroke="#ef4444"
+                  stroke="hsl(0,84%,60%)"
                   strokeWidth={2}
                   strokeDasharray="5 5"
                   dot={false}
@@ -171,19 +174,19 @@ export function FundingCapacityTab() {
       </div>
 
       {/* Actions Panel */}
-      <div className="bg-gradient-to-r from-accent/10 to-accent/5 border border-accent/30 rounded-lg p-5">
-        <h3 className="text-[15px] font-bold text-accent uppercase tracking-wide mb-4 flex items-center gap-2.5">
-          <Clock className="w-5 h-5" />
+      <div className="bg-primary/5 border border-primary/20 rounded-lg p-5">
+        <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
+          <Clock className="w-4 h-4 text-primary" />
           Recommended Actions
         </h3>
         <div className="space-y-0">
           {actions.map((action, i) => (
             <div
               key={i}
-              className="flex items-start gap-3 py-3 border-b border-foreground/[0.05] last:border-b-0"
+              className="flex items-start gap-3 py-3 border-b border-border/60 last:border-b-0"
             >
               <div
-                className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${action.iconClass}`}
+                className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${action.iconBg} ${action.iconColor}`}
               >
                 {action.icon}
               </div>

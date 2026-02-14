@@ -6,12 +6,12 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 export const metadata: Metadata = {
-  title: 'Databank | Treasury Data Hub - Executive Dashboard',
+  title: 'The Pulse | Treasury Data Hub',
   description: 'Executive Dashboard for Liquidity, Funding & Risk Management',
 }
 
 export const viewport: Viewport = {
-  themeColor: '#0a0f1a',
+  themeColor: '#f5f6f8',
 }
 
 export default function RootLayout({

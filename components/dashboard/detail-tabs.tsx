@@ -21,7 +21,7 @@ export function DetailTabs() {
     <section className="mt-6" aria-label="Detail views">
       {/* Tab navigation */}
       <div
-        className="flex gap-1.5 border-b border-foreground/10"
+        className="flex gap-1 border-b border-border"
         role="tablist"
         aria-label="Dashboard detail tabs"
       >
@@ -33,13 +33,16 @@ export function DetailTabs() {
             aria-controls={`panel-${tab.id}`}
             onClick={() => setActiveTab(tab.id)}
             className={cn(
-              "px-7 py-3.5 rounded-t-md text-sm font-semibold uppercase tracking-wide transition-colors",
+              "px-5 py-3 text-sm font-medium transition-colors relative",
               activeTab === tab.id
-                ? "bg-gradient-to-br from-[#1a2744] to-[#0f1a2e] text-accent border border-foreground/[0.08] border-b-0"
-                : "bg-foreground/[0.05] text-muted-foreground hover:bg-foreground/10 hover:text-primary-foreground"
+                ? "text-primary"
+                : "text-muted-foreground hover:text-foreground"
             )}
           >
             {tab.label}
+            {activeTab === tab.id && (
+              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-t" />
+            )}
           </button>
         ))}
       </div>
@@ -48,7 +51,7 @@ export function DetailTabs() {
       <div
         id={`panel-${activeTab}`}
         role="tabpanel"
-        className="bg-gradient-to-br from-[#1a2744] to-[#0f1a2e] border border-foreground/[0.08] border-t-0 rounded-b-lg p-6"
+        className="pt-5"
       >
         {activeTab === "balance" && <BalanceSheetTab />}
         {activeTab === "loans" && <LoansSecuritiesTab />}

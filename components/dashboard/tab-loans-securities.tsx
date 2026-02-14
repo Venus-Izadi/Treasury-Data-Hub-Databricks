@@ -23,12 +23,12 @@ import {
 /* -------------------------------------------------- */
 
 const repricingData = [
-  { bucket: "<3mo", amount: 4.2, color: "#22c55e" },
-  { bucket: "3-6mo", amount: 3.8, color: "#22c55e" },
-  { bucket: "6-12mo", amount: 4.8, color: "#3b82f6" },
-  { bucket: "1-2yr", amount: 4.1, color: "#8b5cf6" },
-  { bucket: "2-3yr", amount: 3.1, color: "#8b5cf6" },
-  { bucket: ">3yr", amount: 4.4, color: "#c9a227" },
+  { bucket: "<3mo", amount: 4.2, color: "hsl(152,55%,41%)" },
+  { bucket: "3-6mo", amount: 3.8, color: "hsl(152,55%,41%)" },
+  { bucket: "6-12mo", amount: 4.8, color: "hsl(217,91%,60%)" },
+  { bucket: "1-2yr", amount: 4.1, color: "hsl(263,70%,50%)" },
+  { bucket: "2-3yr", amount: 3.1, color: "hsl(263,70%,50%)" },
+  { bucket: ">3yr", amount: 4.4, color: "hsl(25,95%,53%)" },
 ]
 
 /* -------------------------------------------------- */
@@ -57,7 +57,7 @@ export function LoansSecuritiesTab() {
           <SubsectionHeader>Commercial</SubsectionHeader>
           <DataRow label="C&I Loans" value="$6.2B @ 6.8%" />
           <DataRow label="Small CRE" value="$3.8B @ 7.1%" />
-          <TotalRow label="Total Loan Portfolio" value="$24.4B" valueClass="text-primary-foreground" />
+          <TotalRow label="Total Loan Portfolio" value="$24.4B" />
         </PanelCard>
 
         <PanelCard>
@@ -67,9 +67,9 @@ export function LoansSecuritiesTab() {
           <div className="h-[180px] mt-4">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={repricingData}>
-                <XAxis dataKey="bucket" tick={{ fill: "#94a3b8", fontSize: 12 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: "#94a3b8", fontSize: 12 }} axisLine={false} tickLine={false} />
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <XAxis dataKey="bucket" tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(220,13%,91%)" />
                 <Bar
                   dataKey="amount"
                   radius={[4, 4, 0, 0]}
@@ -125,7 +125,7 @@ export function LoansSecuritiesTab() {
           <SubsectionHeader>AFS vs HTM Split</SubsectionHeader>
           <DataRow label="Available for Sale (AFS)" value="$4.2B" />
           <DataRow label="Held to Maturity (HTM)" value="$2.5B" />
-          <TotalRow label="Total Securities" value="$6.7B" valueClass="text-primary-foreground" />
+          <TotalRow label="Total Securities" value="$6.7B" />
         </PanelCard>
 
         <PanelCard>
@@ -166,19 +166,19 @@ export function LoansSecuritiesTab() {
               label="Level 1"
               value="$3.1B"
               width="65%"
-              gradient="linear-gradient(90deg,#22c55e,#16a34a)"
+              color="hsl(152,55%,41%)"
             />
             <FundingBar
               label="Level 2A"
               value="$1.3B"
               width="27%"
-              gradient="linear-gradient(90deg,#3b82f6,#2563eb)"
+              color="hsl(217,91%,60%)"
             />
             <FundingBar
               label="Level 2B"
               value="$0.4B"
               width="8%"
-              gradient="linear-gradient(90deg,#f59e0b,#d97706)"
+              color="hsl(25,95%,53%)"
             />
           </div>
           <TotalRow label="Total HQLA" value="$4.8B" />
