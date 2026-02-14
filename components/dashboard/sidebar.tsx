@@ -1,25 +1,44 @@
 "use client"
 
-import { useState } from "react"
 import { cn } from "@/lib/utils"
 import {
   LayoutDashboard,
-  BarChart3,
-  MessageSquare,
+  Landmark,
+  Briefcase,
+  Wallet,
   Settings,
   LogOut,
   Activity,
 } from "lucide-react"
 
-const navItems = [
-  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { id: "lcr", label: "LCR Snapshots", icon: BarChart3 },
-  { id: "conversation", label: "Conversation", icon: MessageSquare },
+export type SidebarPage =
+  | "dashboard"
+  | "balance"
+  | "loans"
+  | "funding"
+
+const navSections = [
+  {
+    items: [
+      { id: "dashboard" as const, label: "Dashboard", icon: LayoutDashboard },
+    ],
+  },
+  {
+    heading: "Detail Views",
+    items: [
+      { id: "balance" as const, label: "Balance Sheet", icon: Landmark },
+      { id: "loans" as const, label: "Loans & Securities", icon: Briefcase },
+      { id: "funding" as const, label: "Funding & Capacity", icon: Wallet },
+    ],
+  },
 ]
 
-export function Sidebar() {
-  const [active, setActive] = useState("dashboard")
+interface SidebarProps {
+  activePage: SidebarPage
+  onNavigate: (page: SidebarPage) => void
+}
 
+export function Sidebar({ activePage, onNavigate }: SidebarProps) {
   return (
     <aside className="w-[220px] shrink-0 bg-card border-r border-border flex flex-col h-screen sticky top-0">
       {/* Logo */}
@@ -35,25 +54,34 @@ export function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 px-3 mt-2">
-        {navItems.map((item) => {
-          const Icon = item.icon
-          const isActive = active === item.id
-          return (
-            <button
-              key={item.id}
-              onClick={() => setActive(item.id)}
-              className={cn(
-                "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors mb-0.5",
-                isActive
-                  ? "bg-primary/10 text-primary"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
-              )}
-            >
-              <Icon className="w-[18px] h-[18px]" />
-              {item.label}
-            </button>
-          )
-        })}
+        {navSections.map((section, sIdx) => (
+          <div key={sIdx} className={sIdx > 0 ? "mt-5" : ""}>
+            {section.heading && (
+              <div className="px-3 mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                {section.heading}
+              </div>
+            )}
+            {section.items.map((item) => {
+              const Icon = item.icon
+              const isActive = activePage === item.id
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => onNavigate(item.id)}
+                  className={cn(
+                    "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors mb-0.5",
+                    isActive
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  )}
+                >
+                  <Icon className="w-[18px] h-[18px]" />
+                  {item.label}
+                </button>
+              )
+            })}
+          </div>
+        ))}
       </nav>
 
       {/* Bottom section */}

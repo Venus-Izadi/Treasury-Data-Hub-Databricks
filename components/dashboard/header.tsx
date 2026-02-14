@@ -2,14 +2,17 @@
 
 import { Calendar, RefreshCw } from "lucide-react"
 
-export function Header() {
+interface HeaderProps {
+  title: string
+  subtitle: string
+}
+
+export function Header({ title, subtitle }: HeaderProps) {
   return (
     <header className="flex items-center justify-between px-8 py-5 border-b border-border bg-card">
       <div>
-        <h1 className="text-2xl font-bold text-foreground">Treasury Data Hub</h1>
-        <p className="text-sm text-muted-foreground mt-0.5">
-          Executive Dashboard | Liquidity, Funding & Risk
-        </p>
+        <h1 className="text-2xl font-bold text-foreground">{title}</h1>
+        <p className="text-sm text-muted-foreground mt-0.5">{subtitle}</p>
       </div>
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2 bg-muted px-3.5 py-2 rounded-lg text-sm text-muted-foreground">
