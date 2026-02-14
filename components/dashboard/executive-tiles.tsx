@@ -12,7 +12,7 @@ import {
   Tooltip,
 } from "recharts"
 import { TrendingUp, TrendingDown, AlertTriangle, ChevronDown, ChevronUp } from "lucide-react"
-import { OverviewCharts } from "./overview-charts"
+
 
 /* -------------------------------------------------- */
 /*  Shared sub-components                             */
@@ -380,8 +380,6 @@ export function ExecutiveTiles() {
       </div>
 
       <InsightsSection />
-
-      <OverviewCharts />
     </section>
   )
 }
