@@ -6,6 +6,7 @@ import {
   Landmark,
   Briefcase,
   Wallet,
+  MessageSquare,
   Settings,
   LogOut,
   Activity,
@@ -16,6 +17,7 @@ export type SidebarPage =
   | "balance"
   | "loans"
   | "funding"
+  | "conversation"
 
 const navSections = [
   {
@@ -24,11 +26,17 @@ const navSections = [
     ],
   },
   {
-    heading: "Detail Views",
+    heading: "Treasury Data Hub",
     items: [
       { id: "balance" as const, label: "Balance Sheet", icon: Landmark },
       { id: "loans" as const, label: "Loans & Securities", icon: Briefcase },
       { id: "funding" as const, label: "Funding & Capacity", icon: Wallet },
+    ],
+  },
+  {
+    heading: "Smart Assist",
+    items: [
+      { id: "conversation" as const, label: "Conversation", icon: MessageSquare },
     ],
   },
 ]

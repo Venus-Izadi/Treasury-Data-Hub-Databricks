@@ -303,7 +303,7 @@ function AlertsTile() {
 }
 
 /* -------------------------------------------------- */
-/*  Insights Section                                  */
+/*  Insights Section (expandable alerts)              */
 /* -------------------------------------------------- */
 
 const insights = [
@@ -311,21 +311,99 @@ const insights = [
     badge: "LCR 127%",
     badgeColor: "bg-status-green/10 text-status-green border border-status-green/20",
     text: "Well above the 100% regulatory minimum. Strong liquidity cushion.",
+    portfolio: "Liquidity Coverage",
+    assignees: ["Treasury Ops", "Risk Management"],
+    status: "Acknowledged" as const,
   },
   {
     badge: "NSFR 115%",
     badgeColor: "bg-status-blue/10 text-status-blue border border-status-blue/20",
     text: "Conservative lending relative to deposits. Low funding risk.",
+    portfolio: "Net Stable Funding",
+    assignees: ["ALM Team"],
+    status: "Under Review" as const,
   },
   {
     badge: "ILST 30d",
     badgeColor: "bg-status-yellow/10 text-status-yellow border border-status-yellow/20",
     icon: true,
     text: "Meets requirements but limited buffer. Monitor closely.",
+    portfolio: "Stress Testing",
+    assignees: ["Risk Management", "CFO Office"],
+    status: "Action Required" as const,
+  },
+  {
+    badge: "CD Maturity",
+    badgeColor: "bg-status-yellow/10 text-status-yellow border border-status-yellow/20",
+    icon: true,
+    text: "$200M in CDs maturing within 7 days. Renewal strategy needed.",
+    portfolio: "Deposit Management",
+    assignees: ["Treasury Ops", "Funding Desk"],
+    status: "Action Required" as const,
+  },
+  {
+    badge: "Uninsured 34.8%",
+    badgeColor: "bg-status-red/10 text-status-red border border-status-red/20",
+    icon: true,
+    text: "Uninsured deposits nearing 35% policy limit. Concentration risk elevated.",
+    portfolio: "Deposit Concentration",
+    assignees: ["Risk Management", "CFO Office", "Board Risk Committee"],
+    status: "Escalated" as const,
+  },
+  {
+    badge: "FHLB $150M",
+    badgeColor: "bg-status-blue/10 text-status-blue border border-status-blue/20",
+    text: "FHLB advance of $150M maturing in 5 business days.",
+    portfolio: "Wholesale Funding",
+    assignees: ["Funding Desk"],
+    status: "Acknowledged" as const,
+  },
+  {
+    badge: "Fed Position",
+    badgeColor: "bg-status-red/10 text-status-red border border-status-red/20",
+    icon: true,
+    text: "Federal Reserve balance approaching minimum threshold before 3PM cutoff.",
+    portfolio: "Federal Reserve",
+    assignees: ["Treasury Ops", "Payments Team"],
+    status: "Action Required" as const,
+  },
+  {
+    badge: "Brokered 9.9%",
+    badgeColor: "bg-status-yellow/10 text-status-yellow border border-status-yellow/20",
+    icon: true,
+    text: "Brokered deposits at 9.9%, approaching 10% policy limit.",
+    portfolio: "Deposit Management",
+    assignees: ["Treasury Ops", "Risk Management"],
+    status: "Under Review" as const,
+  },
+  {
+    badge: "Rate Risk",
+    badgeColor: "bg-status-blue/10 text-status-blue border border-status-blue/20",
+    text: "Interest rate sensitivity gap widened by $120M. Model update recommended.",
+    portfolio: "Interest Rate Risk",
+    assignees: ["ALM Team", "Risk Management"],
+    status: "Under Review" as const,
+  },
+  {
+    badge: "Collateral",
+    badgeColor: "bg-status-green/10 text-status-green border border-status-green/20",
+    text: "Pledged collateral coverage at 112%. Adequate margin maintained.",
+    portfolio: "Collateral Management",
+    assignees: ["Treasury Ops"],
+    status: "Acknowledged" as const,
   },
 ]
 
+const statusStyles: Record<string, string> = {
+  "Acknowledged": "bg-status-green/10 text-status-green",
+  "Under Review": "bg-status-blue/10 text-status-blue",
+  "Action Required": "bg-status-yellow/10 text-status-yellow",
+  "Escalated": "bg-status-red/10 text-status-red",
+}
+
 function InsightsSection() {
+  const [expandedIdx, setExpandedIdx] = useState<number | null>(null)
+
   return (
     <div className="bg-card rounded-lg border border-border p-5">
       <div className="flex items-center justify-between mb-4">
@@ -333,20 +411,60 @@ function InsightsSection() {
           <div className="w-2 h-2 rounded-full bg-primary" />
           <h3 className="text-sm font-semibold text-foreground">Insights</h3>
         </div>
-        <span className="text-xs text-muted-foreground">Auto-generated</span>
+        <span className="text-xs font-medium text-muted-foreground">Number of Alerts: {insights.length}</span>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {insights.map((insight) => (
-          <div key={insight.badge} className="flex flex-col gap-2.5">
-            <div className="flex items-center gap-2">
-              <span className={`text-xs font-semibold px-2.5 py-1 rounded-md ${insight.badgeColor}`}>
-                {insight.badge}
-              </span>
-              {insight.icon && <AlertTriangle className="w-3.5 h-3.5 text-status-yellow" />}
-            </div>
-            <p className="text-sm text-muted-foreground leading-relaxed">{insight.text}</p>
-          </div>
-        ))}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        {insights.map((insight, idx) => {
+          const isExpanded = expandedIdx === idx
+          return (
+            <button
+              key={idx}
+              onClick={() => setExpandedIdx(isExpanded ? null : idx)}
+              className={`text-left rounded-lg border transition-all p-3.5 ${
+                isExpanded
+                  ? "border-primary/30 bg-primary/5 ring-1 ring-primary/10"
+                  : "border-border hover:border-primary/20 hover:bg-muted/50"
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <span className={`text-xs font-semibold px-2.5 py-1 rounded-md ${insight.badgeColor}`}>
+                  {insight.badge}
+                </span>
+                {insight.icon && <AlertTriangle className="w-3.5 h-3.5 text-status-yellow" />}
+                <ChevronDown className={`w-3.5 h-3.5 text-muted-foreground ml-auto transition-transform ${isExpanded ? "rotate-180" : ""}`} />
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed mt-2">{insight.text}</p>
+
+              {isExpanded && (
+                <div className="mt-3 pt-3 border-t border-border/60 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-muted-foreground">Portfolio</span>
+                    <span className="text-xs font-medium text-foreground">{insight.portfolio}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-muted-foreground">Status</span>
+                    <span className={`text-xs font-medium px-2 py-0.5 rounded ${statusStyles[insight.status]}`}>
+                      {insight.status}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-xs text-muted-foreground">Notify / Review</span>
+                    <div className="flex flex-wrap gap-1.5 mt-1.5">
+                      {insight.assignees.map((group) => (
+                        <span
+                          key={group}
+                          className="text-[11px] font-medium bg-muted text-muted-foreground px-2 py-0.5 rounded-full"
+                        >
+                          {group}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </button>
+          )
+        })}
       </div>
     </div>
   )
@@ -359,6 +477,9 @@ function InsightsSection() {
 export function ExecutiveTiles() {
   return (
     <section aria-label="Executive Metrics" className="space-y-5">
+      {/* Insights first */}
+      <InsightsSection />
+
       <div className="flex items-center gap-2">
         <h2 className="text-base font-semibold text-foreground">Treasury Overview</h2>
         <span className="bg-muted text-muted-foreground px-2.5 py-1 rounded-md text-xs font-medium uppercase tracking-wide">
@@ -378,8 +499,6 @@ export function ExecutiveTiles() {
         <CoreDepositsTile />
         <AlertsTile />
       </div>
-
-      <InsightsSection />
     </section>
   )
 }

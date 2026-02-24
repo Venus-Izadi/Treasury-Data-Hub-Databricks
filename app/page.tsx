@@ -2,11 +2,12 @@
 
 import { useState, useEffect, useRef } from "react"
 import { Sidebar, type SidebarPage } from "@/components/dashboard/sidebar"
-import { Header } from "@/components/dashboard/header"
+import { Header, type Timeframe } from "@/components/dashboard/header"
 import { ExecutiveTiles } from "@/components/dashboard/executive-tiles"
 import { BalanceSheetTab } from "@/components/dashboard/tab-balance-sheet"
 import { LoansSecuritiesTab } from "@/components/dashboard/tab-loans-securities"
 import { FundingCapacityTab } from "@/components/dashboard/tab-funding-capacity"
+import { ConversationPage } from "@/components/dashboard/conversation-page"
 
 const pageMeta: Record<SidebarPage, { title: string; subtitle: string }> = {
   dashboard: {
@@ -24,6 +25,10 @@ const pageMeta: Record<SidebarPage, { title: string; subtitle: string }> = {
   funding: {
     title: "Funding & Capacity",
     subtitle: "Borrowing utilization, HQLA composition, and stress results",
+  },
+  conversation: {
+    title: "Conversation",
+    subtitle: "Smart treasury assistant powered by AI",
   },
 }
 
@@ -59,19 +64,21 @@ function PageTransition({ pageKey, children }: { pageKey: string; children: Reac
 
 export default function DashboardPage() {
   const [activePage, setActivePage] = useState<SidebarPage>("dashboard")
+  const [timeframe, setTimeframe] = useState<Timeframe>("2d")
   const { title, subtitle } = pageMeta[activePage]
 
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar activePage={activePage} onNavigate={setActivePage} />
       <div className="flex-1 flex flex-col min-w-0">
-        <Header title={title} subtitle={subtitle} />
+        <Header title={title} subtitle={subtitle} timeframe={timeframe} onTimeframeChange={setTimeframe} />
         <main className="flex-1 px-8 py-6 overflow-y-auto">
           <PageTransition pageKey={activePage}>
             {activePage === "dashboard" && <ExecutiveTiles />}
             {activePage === "balance" && <BalanceSheetTab />}
             {activePage === "loans" && <LoansSecuritiesTab />}
             {activePage === "funding" && <FundingCapacityTab />}
+            {activePage === "conversation" && <ConversationPage />}
           </PageTransition>
         </main>
       </div>
