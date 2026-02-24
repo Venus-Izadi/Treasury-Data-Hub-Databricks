@@ -11,8 +11,18 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts"
-import { TrendingUp, TrendingDown, AlertTriangle, ChevronDown, ChevronUp } from "lucide-react"
-
+import {
+  TrendingUp,
+  TrendingDown,
+  AlertTriangle,
+  ChevronDown,
+  ChevronUp,
+  MessageSquare,
+  Bell,
+  CheckCircle2,
+  Eye,
+  AlertCircle,
+} from "lucide-react"
 
 /* -------------------------------------------------- */
 /*  Shared sub-components                             */
@@ -62,14 +72,25 @@ function ChangeIndicator({
   )
 }
 
-function MiniTooltip({ active, payload, label, unit }: { active?: boolean; payload?: Array<{ value: number; name: string; color: string }>; label?: string; unit?: string }) {
+function MiniTooltip({
+  active,
+  payload,
+  label,
+  unit,
+}: {
+  active?: boolean
+  payload?: Array<{ value: number; name: string; color: string }>
+  label?: string
+  unit?: string
+}) {
   if (!active || !payload?.length) return null
   return (
     <div className="bg-foreground text-card text-xs rounded-md px-2.5 py-1.5 shadow-lg">
       <p className="font-medium mb-0.5">{label}</p>
       {payload.map((entry, i) => (
         <p key={i} style={{ color: entry.color }}>
-          {entry.name}: {unit}{entry.value.toFixed(2)}
+          {entry.name}: {unit}
+          {entry.value.toFixed(2)}
         </p>
       ))}
     </div>
@@ -165,9 +186,7 @@ function RegulatoryTile() {
           { label: "ILST", value: "30d", ok: true },
         ].map((item) => (
           <div key={item.label} className="text-center flex-1">
-            <div className="text-xs font-medium text-muted-foreground uppercase">
-              {item.label}
-            </div>
+            <div className="text-xs font-medium text-muted-foreground uppercase">{item.label}</div>
             <div className="text-xl font-bold text-foreground mt-0.5">{item.value}</div>
             <div
               className={`w-2 h-2 rounded-full mx-auto mt-1.5 ${
@@ -293,9 +312,13 @@ function AlertsTile() {
         className="flex items-center gap-1 text-xs text-primary font-medium mt-3 hover:underline"
       >
         {expanded ? (
-          <>Show less <ChevronUp className="w-3 h-3" /></>
+          <>
+            Show less <ChevronUp className="w-3 h-3" />
+          </>
         ) : (
-          <>View all {allAlerts.length} alerts <ChevronDown className="w-3 h-3" /></>
+          <>
+            View all {allAlerts.length} alerts <ChevronDown className="w-3 h-3" />
+          </>
         )}
       </button>
     </MetricCard>
@@ -303,188 +326,196 @@ function AlertsTile() {
 }
 
 /* -------------------------------------------------- */
-/*  Insights Section (expandable alerts)              */
+/*  Insights Section - compact color-coded list       */
 /* -------------------------------------------------- */
 
-const insights = [
-  {
-    badge: "LCR 127%",
-    badgeColor: "bg-status-green/10 text-status-green border border-status-green/20",
-    text: "Well above the 100% regulatory minimum. Strong liquidity cushion.",
-    portfolio: "Liquidity Coverage",
-    assignees: ["Treasury Ops", "Risk Management"],
-    status: "Acknowledged" as const,
-  },
-  {
-    badge: "NSFR 115%",
-    badgeColor: "bg-status-blue/10 text-status-blue border border-status-blue/20",
-    text: "Conservative lending relative to deposits. Low funding risk.",
-    portfolio: "Net Stable Funding",
-    assignees: ["ALM Team"],
-    status: "Under Review" as const,
-  },
-  {
-    badge: "ILST 30d",
-    badgeColor: "bg-status-yellow/10 text-status-yellow border border-status-yellow/20",
-    icon: true,
-    text: "Meets requirements but limited buffer. Monitor closely.",
-    portfolio: "Stress Testing",
-    assignees: ["Risk Management", "CFO Office"],
-    status: "Action Required" as const,
-  },
-  {
-    badge: "CD Maturity",
-    badgeColor: "bg-status-yellow/10 text-status-yellow border border-status-yellow/20",
-    icon: true,
-    text: "$200M in CDs maturing within 7 days. Renewal strategy needed.",
-    portfolio: "Deposit Management",
-    assignees: ["Treasury Ops", "Funding Desk"],
-    status: "Action Required" as const,
-  },
-  {
-    badge: "Uninsured 34.8%",
-    badgeColor: "bg-status-red/10 text-status-red border border-status-red/20",
-    icon: true,
-    text: "Uninsured deposits nearing 35% policy limit. Concentration risk elevated.",
-    portfolio: "Deposit Concentration",
-    assignees: ["Risk Management", "CFO Office", "Board Risk Committee"],
-    status: "Escalated" as const,
-  },
-  {
-    badge: "FHLB $150M",
-    badgeColor: "bg-status-blue/10 text-status-blue border border-status-blue/20",
-    text: "FHLB advance of $150M maturing in 5 business days.",
-    portfolio: "Wholesale Funding",
-    assignees: ["Funding Desk"],
-    status: "Acknowledged" as const,
-  },
-  {
-    badge: "Fed Position",
-    badgeColor: "bg-status-red/10 text-status-red border border-status-red/20",
-    icon: true,
-    text: "Federal Reserve balance approaching minimum threshold before 3PM cutoff.",
-    portfolio: "Federal Reserve",
-    assignees: ["Treasury Ops", "Payments Team"],
-    status: "Action Required" as const,
-  },
-  {
-    badge: "Brokered 9.9%",
-    badgeColor: "bg-status-yellow/10 text-status-yellow border border-status-yellow/20",
-    icon: true,
-    text: "Brokered deposits at 9.9%, approaching 10% policy limit.",
-    portfolio: "Deposit Management",
-    assignees: ["Treasury Ops", "Risk Management"],
-    status: "Under Review" as const,
-  },
-  {
-    badge: "Rate Risk",
-    badgeColor: "bg-status-blue/10 text-status-blue border border-status-blue/20",
-    text: "Interest rate sensitivity gap widened by $120M. Model update recommended.",
-    portfolio: "Interest Rate Risk",
-    assignees: ["ALM Team", "Risk Management"],
-    status: "Under Review" as const,
-  },
-  {
-    badge: "Collateral",
-    badgeColor: "bg-status-green/10 text-status-green border border-status-green/20",
-    text: "Pledged collateral coverage at 112%. Adequate margin maintained.",
-    portfolio: "Collateral Management",
-    assignees: ["Treasury Ops"],
-    status: "Acknowledged" as const,
-  },
+type InsightSeverity = "green" | "blue" | "yellow" | "red"
+
+interface InsightItem {
+  badge: string
+  severity: InsightSeverity
+  text: string
+  portfolio: string
+  assignees: string[]
+  status: "Acknowledged" | "Under Review" | "Action Required" | "Escalated"
+}
+
+const insights: InsightItem[] = [
+  { badge: "LCR 127%", severity: "green", text: "Well above the 100% regulatory minimum. Strong liquidity cushion.", portfolio: "Liquidity Coverage", assignees: ["Treasury Ops", "Risk Management"], status: "Acknowledged" },
+  { badge: "NSFR 115%", severity: "blue", text: "Conservative lending relative to deposits. Low funding risk.", portfolio: "Net Stable Funding", assignees: ["ALM Team"], status: "Under Review" },
+  { badge: "ILST 30d", severity: "yellow", text: "Meets requirements but limited buffer. Monitor closely.", portfolio: "Stress Testing", assignees: ["Risk Management", "CFO Office"], status: "Action Required" },
+  { badge: "CD Maturity", severity: "yellow", text: "$200M in CDs maturing within 7 days. Renewal strategy needed.", portfolio: "Deposit Management", assignees: ["Treasury Ops", "Funding Desk"], status: "Action Required" },
+  { badge: "Uninsured 34.8%", severity: "red", text: "Uninsured deposits nearing 35% policy limit. Concentration risk elevated.", portfolio: "Deposit Concentration", assignees: ["Risk Management", "CFO Office", "Board Risk Committee"], status: "Escalated" },
+  { badge: "FHLB $150M", severity: "blue", text: "FHLB advance of $150M maturing in 5 business days.", portfolio: "Wholesale Funding", assignees: ["Funding Desk"], status: "Acknowledged" },
+  { badge: "Fed Position", severity: "red", text: "Federal Reserve balance approaching minimum threshold before 3PM cutoff.", portfolio: "Federal Reserve", assignees: ["Treasury Ops", "Payments Team"], status: "Action Required" },
+  { badge: "Brokered 9.9%", severity: "yellow", text: "Brokered deposits at 9.9%, approaching 10% policy limit.", portfolio: "Deposit Management", assignees: ["Treasury Ops", "Risk Management"], status: "Under Review" },
+  { badge: "Rate Risk", severity: "blue", text: "Interest rate sensitivity gap widened by $120M. Model update recommended.", portfolio: "Interest Rate Risk", assignees: ["ALM Team", "Risk Management"], status: "Under Review" },
+  { badge: "Collateral", severity: "green", text: "Pledged collateral coverage at 112%. Adequate margin maintained.", portfolio: "Collateral Management", assignees: ["Treasury Ops"], status: "Acknowledged" },
 ]
 
-const statusStyles: Record<string, string> = {
-  "Acknowledged": "bg-status-green/10 text-status-green",
-  "Under Review": "bg-status-blue/10 text-status-blue",
-  "Action Required": "bg-status-yellow/10 text-status-yellow",
-  "Escalated": "bg-status-red/10 text-status-red",
+const severityConfig: Record<InsightSeverity, { border: string; bg: string; badgeBg: string; badgeText: string; dotColor: string }> = {
+  green: { border: "border-l-status-green", bg: "hover:bg-status-green/5", badgeBg: "bg-status-green/10", badgeText: "text-status-green", dotColor: "bg-status-green" },
+  blue: { border: "border-l-status-blue", bg: "hover:bg-status-blue/5", badgeBg: "bg-status-blue/10", badgeText: "text-status-blue", dotColor: "bg-status-blue" },
+  yellow: { border: "border-l-status-yellow", bg: "hover:bg-status-yellow/5", badgeBg: "bg-status-yellow/10", badgeText: "text-status-yellow", dotColor: "bg-status-yellow" },
+  red: { border: "border-l-status-red", bg: "hover:bg-status-red/5", badgeBg: "bg-status-red/10", badgeText: "text-status-red", dotColor: "bg-status-red" },
+}
+
+const statusConfig: Record<string, { icon: React.ElementType; color: string }> = {
+  "Acknowledged": { icon: CheckCircle2, color: "text-status-green" },
+  "Under Review": { icon: Eye, color: "text-status-blue" },
+  "Action Required": { icon: AlertCircle, color: "text-status-yellow" },
+  "Escalated": { icon: AlertTriangle, color: "text-status-red" },
 }
 
 function InsightsSection() {
   const [expandedIdx, setExpandedIdx] = useState<number | null>(null)
+  const [showAll, setShowAll] = useState(false)
+  const displayed = showAll ? insights : insights.slice(0, 5)
+
+  const countByStatus = {
+    escalated: insights.filter((i) => i.status === "Escalated").length,
+    actionRequired: insights.filter((i) => i.status === "Action Required").length,
+    underReview: insights.filter((i) => i.status === "Under Review").length,
+    acknowledged: insights.filter((i) => i.status === "Acknowledged").length,
+  }
 
   return (
-    <div className="bg-card rounded-lg border border-border p-5">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-primary" />
-          <h3 className="text-sm font-semibold text-foreground">Insights</h3>
+    <div className="bg-card rounded-lg border border-border overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <Bell className="w-4 h-4 text-primary" />
+            <h3 className="text-sm font-semibold text-foreground">Insights & Alerts</h3>
+          </div>
+          <span className="bg-primary/10 text-primary text-xs font-bold px-2 py-0.5 rounded-full">
+            {insights.length}
+          </span>
         </div>
-        <span className="text-xs font-medium text-muted-foreground">Number of Alerts: {insights.length}</span>
+        <div className="flex items-center gap-3">
+          {countByStatus.escalated > 0 && (
+            <span className="flex items-center gap-1 text-xs font-medium text-status-red">
+              <span className="w-1.5 h-1.5 rounded-full bg-status-red" />
+              {countByStatus.escalated} Escalated
+            </span>
+          )}
+          {countByStatus.actionRequired > 0 && (
+            <span className="flex items-center gap-1 text-xs font-medium text-status-yellow">
+              <span className="w-1.5 h-1.5 rounded-full bg-status-yellow" />
+              {countByStatus.actionRequired} Action Required
+            </span>
+          )}
+          {countByStatus.underReview > 0 && (
+            <span className="flex items-center gap-1 text-xs font-medium text-status-blue">
+              <span className="w-1.5 h-1.5 rounded-full bg-status-blue" />
+              {countByStatus.underReview} Review
+            </span>
+          )}
+        </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        {insights.map((insight, idx) => {
+
+      {/* Alert rows */}
+      <div className="divide-y divide-border">
+        {displayed.map((insight, idx) => {
+          const sev = severityConfig[insight.severity]
           const isExpanded = expandedIdx === idx
+          const StatusIcon = statusConfig[insight.status].icon
+
           return (
-            <button
-              key={idx}
-              onClick={() => setExpandedIdx(isExpanded ? null : idx)}
-              className={`text-left rounded-lg border transition-all p-3.5 ${
-                isExpanded
-                  ? "border-primary/30 bg-primary/5 ring-1 ring-primary/10"
-                  : "border-border hover:border-primary/20 hover:bg-muted/50"
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                <span className={`text-xs font-semibold px-2.5 py-1 rounded-md ${insight.badgeColor}`}>
+            <div key={idx}>
+              <button
+                onClick={() => setExpandedIdx(isExpanded ? null : idx)}
+                className={`w-full text-left flex items-center gap-4 px-5 py-3 border-l-[3px] transition-colors ${sev.border} ${sev.bg} ${isExpanded ? "bg-muted/50" : ""}`}
+              >
+                <span className={`text-[11px] font-bold px-2 py-0.5 rounded ${sev.badgeBg} ${sev.badgeText} whitespace-nowrap`}>
                   {insight.badge}
                 </span>
-                {insight.icon && <AlertTriangle className="w-3.5 h-3.5 text-status-yellow" />}
-                <ChevronDown className={`w-3.5 h-3.5 text-muted-foreground ml-auto transition-transform ${isExpanded ? "rotate-180" : ""}`} />
-              </div>
-              <p className="text-sm text-muted-foreground leading-relaxed mt-2">{insight.text}</p>
+                <p className="text-sm text-foreground flex-1 truncate">{insight.text}</p>
+                <div className="flex items-center gap-3 shrink-0">
+                  <span className="hidden md:flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <StatusIcon className={`w-3.5 h-3.5 ${statusConfig[insight.status].color}`} />
+                    {insight.status}
+                  </span>
+                  <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${isExpanded ? "rotate-180" : ""}`} />
+                </div>
+              </button>
 
               {isExpanded && (
-                <div className="mt-3 pt-3 border-t border-border/60 space-y-2.5">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground">Portfolio</span>
-                    <span className="text-xs font-medium text-foreground">{insight.portfolio}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground">Status</span>
-                    <span className={`text-xs font-medium px-2 py-0.5 rounded ${statusStyles[insight.status]}`}>
-                      {insight.status}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-xs text-muted-foreground">Notify / Review</span>
-                    <div className="flex flex-wrap gap-1.5 mt-1.5">
-                      {insight.assignees.map((group) => (
-                        <span
-                          key={group}
-                          className="text-[11px] font-medium bg-muted text-muted-foreground px-2 py-0.5 rounded-full"
-                        >
-                          {group}
-                        </span>
-                      ))}
+                <div className={`px-5 py-3.5 border-l-[3px] bg-muted/30 ${sev.border}`}>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <span className="text-[11px] uppercase tracking-wider text-muted-foreground font-medium">Portfolio</span>
+                      <p className="text-sm font-medium text-foreground mt-0.5">{insight.portfolio}</p>
+                    </div>
+                    <div>
+                      <span className="text-[11px] uppercase tracking-wider text-muted-foreground font-medium">Status</span>
+                      <div className="flex items-center gap-1.5 mt-0.5">
+                        <StatusIcon className={`w-3.5 h-3.5 ${statusConfig[insight.status].color}`} />
+                        <p className={`text-sm font-medium ${statusConfig[insight.status].color}`}>{insight.status}</p>
+                      </div>
+                    </div>
+                    <div>
+                      <span className="text-[11px] uppercase tracking-wider text-muted-foreground font-medium">Notify / Review</span>
+                      <div className="flex flex-wrap gap-1.5 mt-1">
+                        {insight.assignees.map((group) => (
+                          <span key={group} className="text-[11px] font-medium bg-card border border-border text-foreground px-2 py-0.5 rounded-full">
+                            {group}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
               )}
-            </button>
+            </div>
           )
         })}
       </div>
+
+      {/* Show more/less */}
+      {insights.length > 5 && (
+        <div className="px-5 py-3 border-t border-border">
+          <button
+            onClick={() => { setShowAll(!showAll); setExpandedIdx(null) }}
+            className="flex items-center gap-1.5 text-xs text-primary font-medium hover:underline"
+          >
+            {showAll ? (
+              <>Show less <ChevronUp className="w-3.5 h-3.5" /></>
+            ) : (
+              <>View all {insights.length} alerts <ChevronDown className="w-3.5 h-3.5" /></>
+            )}
+          </button>
+        </div>
+      )}
     </div>
   )
 }
 
 /* -------------------------------------------------- */
-/*  Executive Tiles Section (3 + 2 grid)              */
+/*  Executive Tiles Section                           */
 /* -------------------------------------------------- */
 
-export function ExecutiveTiles() {
+export function ExecutiveTiles({ onNavigateToConversation }: { onNavigateToConversation?: () => void }) {
   return (
     <section aria-label="Executive Metrics" className="space-y-5">
       {/* Insights first */}
       <InsightsSection />
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3">
         <h2 className="text-base font-semibold text-foreground">Treasury Overview</h2>
         <span className="bg-muted text-muted-foreground px-2.5 py-1 rounded-md text-xs font-medium uppercase tracking-wide">
           Last 2 Days
         </span>
+        {onNavigateToConversation && (
+          <button
+            onClick={onNavigateToConversation}
+            title="Ask AI about these metrics"
+            className="ml-auto flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 hover:bg-primary/20 px-3 py-1.5 rounded-lg transition-colors"
+          >
+            <MessageSquare className="w-3.5 h-3.5" />
+            Ask AI
+          </button>
+        )}
       </div>
 
       {/* Row 1: 3 cards */}

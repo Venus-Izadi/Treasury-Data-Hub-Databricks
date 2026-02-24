@@ -74,7 +74,7 @@ export default function DashboardPage() {
         <Header title={title} subtitle={subtitle} timeframe={timeframe} onTimeframeChange={setTimeframe} />
         <main className="flex-1 px-8 py-6 overflow-y-auto">
           <PageTransition pageKey={activePage}>
-            {activePage === "dashboard" && <ExecutiveTiles />}
+            {activePage === "dashboard" && <ExecutiveTiles onNavigateToConversation={() => setActivePage("conversation")} />}
             {activePage === "balance" && <BalanceSheetTab />}
             {activePage === "loans" && <LoansSecuritiesTab />}
             {activePage === "funding" && <FundingCapacityTab />}

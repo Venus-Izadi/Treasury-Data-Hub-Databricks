@@ -129,8 +129,8 @@ export function FundingCapacityTab() {
           <div className="h-[180px] mt-4">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={ilstData}>
-                <XAxis dataKey="day" tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
-                <YAxis domain={[0, 10]} tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
+                <XAxis dataKey="day" tick={{ fill: "#64748b", fontSize: 11 }} axisLine={false} tickLine={false} label={{ value: "Horizon", position: "insideBottom", offset: -2, style: { fill: "#94a3b8", fontSize: 10 } }} />
+                <YAxis domain={[0, 10]} tick={{ fill: "#64748b", fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v: number) => `$${v}B`} label={{ value: "Liquidity ($B)", angle: -90, position: "insideLeft", offset: 10, style: { fill: "#94a3b8", fontSize: 10 } }} />
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(220,13%,91%)" />
                 <Tooltip content={<ChartTooltip formatter={(v) => `$${v}B`} />} />
                 <Legend verticalAlign="top" height={36} wrapperStyle={{ fontSize: 11, color: "#64748b" }} />

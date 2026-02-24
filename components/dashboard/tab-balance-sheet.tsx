@@ -127,8 +127,8 @@ export function BalanceSheetTab() {
           <div className="h-[180px] mt-4">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={depositTrendData}>
-                <XAxis dataKey="month" tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
-                <YAxis domain={[41, 46]} tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
+                <XAxis dataKey="month" tick={{ fill: "#64748b", fontSize: 11 }} axisLine={false} tickLine={false} label={{ value: "Month", position: "insideBottom", offset: -2, style: { fill: "#94a3b8", fontSize: 10 } }} />
+                <YAxis domain={[41, 46]} tick={{ fill: "#64748b", fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v: number) => `$${v}B`} label={{ value: "Deposits ($B)", angle: -90, position: "insideLeft", offset: 10, style: { fill: "#94a3b8", fontSize: 10 } }} />
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(220,13%,91%)" />
                 <Tooltip content={<ChartTooltip formatter={(v) => `$${v}B`} />} />
                 <Area dataKey="deposits" name="Deposits" stroke="hsl(25,95%,53%)" fill="hsl(25,95%,53%)" fillOpacity={0.1} strokeWidth={2} />
@@ -155,8 +155,8 @@ export function BalanceSheetTab() {
           <div className="h-[180px] mt-4">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={channelFlowData}>
-                <XAxis dataKey="channel" tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
+                <XAxis dataKey="channel" tick={{ fill: "#64748b", fontSize: 11 }} axisLine={false} tickLine={false} label={{ value: "Channel", position: "insideBottom", offset: -2, style: { fill: "#94a3b8", fontSize: 10 } }} />
+                <YAxis tick={{ fill: "#64748b", fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v: number) => `$${v}M`} label={{ value: "Net Flow ($M)", angle: -90, position: "insideLeft", offset: 10, style: { fill: "#94a3b8", fontSize: 10 } }} />
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(220,13%,91%)" />
                 <Tooltip content={<ChartTooltip formatter={(v) => `$${v}M`} />} />
                 <Bar
@@ -183,8 +183,8 @@ export function BalanceSheetTab() {
           <div className="h-[180px] mt-4">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={segmentFlowData}>
-                <XAxis dataKey="segment" tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
+                <XAxis dataKey="segment" tick={{ fill: "#64748b", fontSize: 11 }} axisLine={false} tickLine={false} label={{ value: "Segment", position: "insideBottom", offset: -2, style: { fill: "#94a3b8", fontSize: 10 } }} />
+                <YAxis tick={{ fill: "#64748b", fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v: number) => `$${v}M`} label={{ value: "Net Flow ($M)", angle: -90, position: "insideLeft", offset: 10, style: { fill: "#94a3b8", fontSize: 10 } }} />
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(220,13%,91%)" />
                 <Tooltip content={<ChartTooltip formatter={(v) => `$${v}M`} />} />
                 <Bar
@@ -214,13 +214,14 @@ export function BalanceSheetTab() {
         <div className="h-[180px] mt-4">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={uninsuredTrendData}>
-              <XAxis dataKey="date" tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
+              <XAxis dataKey="date" tick={{ fill: "#64748b", fontSize: 11 }} axisLine={false} tickLine={false} label={{ value: "Date", position: "insideBottom", offset: -2, style: { fill: "#94a3b8", fontSize: 10 } }} />
               <YAxis
                 domain={[25, 40]}
-                tick={{ fill: "#64748b", fontSize: 12 }}
+                tick={{ fill: "#64748b", fontSize: 11 }}
                 axisLine={false}
                 tickLine={false}
-                tickFormatter={(v) => `${v}%`}
+                tickFormatter={(v: number) => `${v}%`}
+                label={{ value: "Uninsured %", angle: -90, position: "insideLeft", offset: 10, style: { fill: "#94a3b8", fontSize: 10 } }}
               />
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(220,13%,91%)" />
               <Tooltip content={<ChartTooltip formatter={(v, n) => n.includes("Limit") ? `${v}%` : `${v}%`} />} />

@@ -69,8 +69,8 @@ export function LoansSecuritiesTab() {
           <div className="h-[180px] mt-4">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={repricingData}>
-                <XAxis dataKey="bucket" tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: "#64748b", fontSize: 12 }} axisLine={false} tickLine={false} />
+                <XAxis dataKey="bucket" tick={{ fill: "#64748b", fontSize: 11 }} axisLine={false} tickLine={false} label={{ value: "Maturity Bucket", position: "insideBottom", offset: -2, style: { fill: "#94a3b8", fontSize: 10 } }} />
+                <YAxis tick={{ fill: "#64748b", fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v: number) => `$${v}B`} label={{ value: "Amount ($B)", angle: -90, position: "insideLeft", offset: 10, style: { fill: "#94a3b8", fontSize: 10 } }} />
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(220,13%,91%)" />
                 <Tooltip content={<ChartTooltip formatter={(v) => `$${v}B`} />} />
                 <Bar
