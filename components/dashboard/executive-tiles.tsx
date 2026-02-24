@@ -121,11 +121,11 @@ function FedReserveTile() {
         <span className="text-lg text-muted-foreground font-medium">B</span>
       </div>
       <ChangeIndicator value="+$250M" suffix="from open" positive />
-      <div className="h-14 mt-3">
+      <div className="h-20 mt-3">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={fedData}>
-            <YAxis domain={[2, 2.6]} hide />
-            <XAxis dataKey="time" hide />
+          <LineChart data={fedData} margin={{ bottom: 2, left: 4, right: 4 }}>
+            <YAxis domain={[2, 2.6]} tick={{ fill: "#94a3b8", fontSize: 9 }} axisLine={false} tickLine={false} width={30} tickFormatter={(v: number) => `$${v}B`} />
+            <XAxis dataKey="time" tick={{ fill: "#94a3b8", fontSize: 9 }} axisLine={false} tickLine={false} />
             <Tooltip content={<MiniTooltip unit="$" />} />
             <Line dataKey="actual" name="Actual" stroke="hsl(152,55%,41%)" strokeWidth={2} dot={false} />
             <Line dataKey="forecast" name="Forecast" stroke="hsl(217,91%,60%)" strokeWidth={1.5} strokeDasharray="4 4" dot={false} />
@@ -233,11 +233,11 @@ function CoreDepositsTile() {
         <span className="text-lg text-muted-foreground font-medium">B</span>
       </div>
       <ChangeIndicator value="-0.8%" suffix="WoW" positive={false} />
-      <div className="h-14 mt-3">
+      <div className="h-20 mt-3">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={depositData}>
-            <XAxis dataKey="week" hide />
-            <YAxis domain={[42, 43.5]} hide />
+          <AreaChart data={depositData} margin={{ bottom: 2, left: 4, right: 4 }}>
+            <XAxis dataKey="week" tick={{ fill: "#94a3b8", fontSize: 9 }} axisLine={false} tickLine={false} />
+            <YAxis domain={[42, 43.5]} tick={{ fill: "#94a3b8", fontSize: 9 }} axisLine={false} tickLine={false} width={34} tickFormatter={(v: number) => `$${v}B`} />
             <Tooltip content={<MiniTooltip unit="$" />} />
             <Area
               dataKey="value"
@@ -522,12 +522,12 @@ export function ExecutiveTiles({ onNavigateToConversation }: { onNavigateToConve
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <FedReserveTile />
         <ConsolidatedCashTile />
-        <RegulatoryTile />
+        <CoreDepositsTile />
       </div>
 
       {/* Row 2: 2 cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <CoreDepositsTile />
+        <RegulatoryTile />
         <AlertsTile />
       </div>
     </section>
