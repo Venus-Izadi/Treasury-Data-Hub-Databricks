@@ -8,8 +8,6 @@ import {
   Briefcase,
   Wallet,
   MessageSquare,
-  Settings,
-  LogOut,
   X,
 } from "lucide-react"
 
@@ -148,31 +146,10 @@ export function Sidebar({ activePage, onNavigate, isOpen = false, onClose }: Sid
           ))}
         </nav>
 
-        {/* Bottom section */}
+        {/* Bottom section - Powered by badge */}
         <div className="px-3 pb-4 border-t border-border pt-3 mt-auto">
-          <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
-            <Settings className="w-[18px] h-[18px]" />
-            Settings
-          </button>
-
-          <div className="flex items-center gap-3 px-3 py-3 mt-1">
-            <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-              <span className="text-xs font-semibold text-muted-foreground">SC</span>
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="text-sm font-medium text-foreground truncate">Sarah Chen</div>
-              <div className="text-xs text-muted-foreground">CFO</div>
-            </div>
-            <button className="text-muted-foreground hover:text-foreground transition-colors">
-              <LogOut className="w-4 h-4" />
-            </button>
-          </div>
-
-          {/* Powered by badge */}
-          <div className="px-3 pt-3 mt-2 border-t border-border">
-            <div className="text-[10px] text-muted-foreground text-center">
-              Powered by <span className="font-semibold text-[#FF3621]">Databricks</span>
-            </div>
+          <div className="text-[10px] text-muted-foreground text-center">
+            Powered by <span className="font-semibold text-[#FF3621]">Databricks</span>
           </div>
         </div>
       </aside>
