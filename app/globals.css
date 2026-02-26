@@ -1,3 +1,14 @@
+/*
+ * DATABANK TREASURY DASHBOARD - GLOBAL STYLES
+ * ============================================
+ * 
+ * This file contains all CSS custom properties (design tokens) for the app.
+ * See lib/design-system.ts for full documentation and usage examples.
+ * 
+ * COLOR FORMAT: HSL values without hsl() wrapper (e.g., "152 55% 41%")
+ * USAGE: In Tailwind, use semantic classes like bg-primary, text-muted-foreground
+ */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -10,38 +21,57 @@
 
 @layer base {
   :root {
-    --background: 220 20% 97%;
-    --foreground: 220 20% 10%;
-    --card: 0 0% 100%;
-    --card-foreground: 220 20% 10%;
-    --popover: 0 0% 100%;
+    /* ========== CORE COLORS ========== */
+    
+    /* Background & Surface */
+    --background: 220 20% 97%;        /* Light gray page background */
+    --foreground: 220 20% 10%;        /* Dark text on light backgrounds */
+    --card: 0 0% 100%;                /* White card backgrounds */
+    --card-foreground: 220 20% 10%;   /* Text on cards */
+    --popover: 0 0% 100%;             /* Dropdown/popover backgrounds */
     --popover-foreground: 220 20% 10%;
-    --primary: 152 55% 41%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 220 14% 96%;
+    
+    /* Primary Brand (Green) */
+    --primary: 152 55% 41%;           /* Main brand color - used for CTAs, active states */
+    --primary-foreground: 0 0% 100%;  /* White text on primary */
+    
+    /* Secondary & Muted */
+    --secondary: 220 14% 96%;         /* Subtle backgrounds */
     --secondary-foreground: 220 20% 10%;
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 9% 46%;
+    --muted: 220 14% 96%;             /* Muted/disabled backgrounds */
+    --muted-foreground: 220 9% 46%;   /* Secondary text, labels */
+    
+    /* Accent (same as primary for this theme) */
     --accent: 152 55% 41%;
     --accent-foreground: 0 0% 100%;
+    
+    /* Destructive (Red) */
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 152 55% 41%;
-    --chart-1: 152 55% 41%;
-    --chart-2: 217 91% 60%;
-    --chart-3: 25 95% 53%;
-    --chart-4: 263 70% 50%;
-    --chart-5: 0 84% 60%;
-    --radius: 0.75rem;
-
-    --status-green: 152 55% 41%;
-    --status-yellow: 25 95% 53%;
-    --status-red: 0 84% 60%;
-    --status-blue: 217 91% 60%;
-    --sidebar-bg: 0 0% 100%;
-    --sidebar-border: 220 13% 91%;
+    
+    /* Borders & Inputs */
+    --border: 220 13% 91%;            /* Default border color */
+    --input: 220 13% 91%;             /* Input field borders */
+    --ring: 152 55% 41%;              /* Focus ring color */
+    
+    /* ========== CHART COLORS ========== */
+    --chart-1: 152 55% 41%;           /* Green - primary data */
+    --chart-2: 217 91% 60%;           /* Blue - secondary data */
+    --chart-3: 25 95% 53%;            /* Orange - tertiary data */
+    --chart-4: 263 70% 50%;           /* Purple - quaternary data */
+    --chart-5: 0 84% 60%;             /* Red - quinary data */
+    
+    /* ========== STATUS COLORS ========== */
+    /* Use these for alerts, badges, and metric indicators */
+    --status-green: 152 55% 41%;      /* Positive, success, good */
+    --status-yellow: 25 95% 53%;      /* Warning, caution, attention */
+    --status-red: 0 84% 60%;          /* Critical, error, action required */
+    --status-blue: 217 91% 60%;       /* Informational, neutral */
+    
+    /* ========== LAYOUT ========== */
+    --radius: 0.75rem;                /* Default border radius (12px) */
+    --sidebar-bg: 0 0% 100%;          /* Sidebar background */
+    --sidebar-border: 220 13% 91%;    /* Sidebar border */
   }
 }
 
