@@ -23,6 +23,12 @@ import {
   MaturityTag,
 } from "./panel-components"
 import { ChartTooltip } from "./chart-tooltip"
+import type { Timeframe } from "./header"
+
+// Props interface - timeframe passed for future backend integration
+interface BalanceSheetTabProps {
+  timeframe?: Timeframe
+}
 
 /* -------------------------------------------------- */
 /*  Chart data                                        */
@@ -74,7 +80,9 @@ const uninsuredTrendData = [
 /*  Component                                         */
 /* -------------------------------------------------- */
 
-export function BalanceSheetTab() {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function BalanceSheetTab({ timeframe = "2d" }: BalanceSheetTabProps) {
+  // timeframe will be used when connecting to backend API
   return (
     <div className="space-y-5">
       {/* Row 1 */}

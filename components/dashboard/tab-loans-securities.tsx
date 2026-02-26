@@ -19,6 +19,12 @@ import {
   FundingBar,
 } from "./panel-components"
 import { ChartTooltip } from "./chart-tooltip"
+import type { Timeframe } from "./header"
+
+// Props interface - timeframe passed for future backend integration
+interface LoansSecuritiesTabProps {
+  timeframe?: Timeframe
+}
 
 /* -------------------------------------------------- */
 /*  Chart data                                        */
@@ -37,7 +43,9 @@ const repricingData = [
 /*  Component                                         */
 /* -------------------------------------------------- */
 
-export function LoansSecuritiesTab() {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function LoansSecuritiesTab({ timeframe = "2d" }: LoansSecuritiesTabProps) {
+  // timeframe will be used when connecting to backend API
   return (
     <div className="space-y-5">
       {/* Row 1: Loan Portfolio & Rate Repricing */}

@@ -23,6 +23,16 @@ import {
   Eye,
   AlertCircle,
 } from "lucide-react"
+import type { DashboardData, AlertSeverity, InsightItem, InsightSeverity, InsightStatus } from "@/lib/types/dashboard"
+
+/* -------------------------------------------------- */
+/*  Props Interface                                   */
+/* -------------------------------------------------- */
+
+interface ExecutiveTilesProps {
+  data?: DashboardData
+  onNavigateToConversation?: () => void
+}
 
 /* -------------------------------------------------- */
 /*  Shared sub-components                             */
@@ -121,26 +131,23 @@ function MiniTooltip({
 /*  Tile 1 - Federal Reserve                          */
 /* -------------------------------------------------- */
 
-const fedData = [
-  { time: "8AM", actual: 2.2, forecast: 2.2 },
-  { time: "10AM", actual: 2.35, forecast: 2.3 },
-  { time: "12PM", actual: 2.45, forecast: 2.38 },
-  { time: "2PM", actual: 2.4, forecast: 2.42 },
-  { time: "4PM", actual: 2.48, forecast: 2.5 },
-  { time: "EOD", actual: 2.52, forecast: 2.52 },
-]
-
-function FedReserveTile({ onAskAI }: { onAskAI?: () => void }) {
+function FedReserveTile({
+  data,
+  onAskAI,
+}: {
+  data: DashboardData["fedReserve"]
+  onAskAI?: () => void
+}) {
   return (
     <MetricCard borderColor="hsl(152,55%,41%)" title="Fed Reserve Balance" onAskAI={onAskAI}>
       <div className="flex items-baseline gap-1.5">
-        <span className="text-3xl font-bold text-foreground">$2.45</span>
+        <span className="text-3xl font-bold text-foreground">${data.currentBalance.toFixed(2)}</span>
         <span className="text-lg text-muted-foreground font-medium">B</span>
       </div>
-      <ChangeIndicator value="+$250M" suffix="from open" positive />
+      <ChangeIndicator value={`+$${data.changeFromOpen.toFixed(0)}M`} suffix="from open" positive />
       <div className="h-20 mt-3">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={fedData} margin={{ bottom: 2, left: 4, right: 4 }}>
+          <LineChart data={data.trend} margin={{ bottom: 2, left: 4, right: 4 }}>
             <YAxis domain={[2, 2.6]} tick={{ fill: "#94a3b8", fontSize: 9 }} axisLine={false} tickLine={false} width={30} tickFormatter={(v: number) => `$${v}B`} />
             <XAxis dataKey="time" tick={{ fill: "#94a3b8", fontSize: 9 }} axisLine={false} tickLine={false} />
             <Tooltip content={<MiniTooltip unit="$" />} />
@@ -157,27 +164,27 @@ function FedReserveTile({ onAskAI }: { onAskAI?: () => void }) {
 /*  Tile 2 - Consolidated Cash                        */
 /* -------------------------------------------------- */
 
-function ConsolidatedCashTile({ onAskAI }: { onAskAI?: () => void }) {
+function ConsolidatedCashTile({
+  data,
+  onAskAI,
+}: {
+  data: DashboardData["consolidatedCash"]
+  onAskAI?: () => void
+}) {
   return (
     <MetricCard borderColor="hsl(152,55%,41%)" title="Consolidated Cash" onAskAI={onAskAI}>
       <div className="flex items-baseline gap-1.5">
-        <span className="text-3xl font-bold text-foreground">$8.72</span>
+        <span className="text-3xl font-bold text-foreground">${data.total.toFixed(2)}</span>
         <span className="text-lg text-muted-foreground font-medium">B</span>
       </div>
-      <ChangeIndicator value="+1.2%" suffix="DoD" positive />
+      <ChangeIndicator value={`+${data.changePercent.toFixed(1)}%`} suffix="DoD" positive />
       <div className="mt-4 space-y-2">
-        <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Fed Account</span>
-          <span className="font-medium text-foreground">$2.45B</span>
-        </div>
-        <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Operating</span>
-          <span className="font-medium text-foreground">$1.85B</span>
-        </div>
-        <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Correspondent</span>
-          <span className="font-medium text-foreground">$2.12B</span>
-        </div>
+        {data.breakdown.map((item) => (
+          <div key={item.label} className="flex justify-between text-sm">
+            <span className="text-muted-foreground">{item.label}</span>
+            <span className="font-medium text-foreground">${item.value.toFixed(2)}B</span>
+          </div>
+        ))}
       </div>
     </MetricCard>
   )
@@ -187,15 +194,17 @@ function ConsolidatedCashTile({ onAskAI }: { onAskAI?: () => void }) {
 /*  Tile 3 - Regulatory Headroom                      */
 /* -------------------------------------------------- */
 
-function RegulatoryTile({ onAskAI }: { onAskAI?: () => void }) {
+function RegulatoryTile({
+  data,
+  onAskAI,
+}: {
+  data: DashboardData["regulatory"]
+  onAskAI?: () => void
+}) {
   return (
     <MetricCard borderColor="hsl(25,95%,53%)" title="Regulatory Headroom" onAskAI={onAskAI}>
       <div className="flex items-center gap-4 mt-1">
-        {[
-          { label: "LCR", value: "127%", ok: true },
-          { label: "NSFR", value: "115%", ok: true },
-          { label: "ILST", value: "30d", ok: true },
-        ].map((item) => (
+        {data.metrics.map((item) => (
           <div key={item.label} className="text-center flex-1">
             <div className="text-xs font-medium text-muted-foreground uppercase">{item.label}</div>
             <div className="text-xl font-bold text-foreground mt-0.5">{item.value}</div>
@@ -210,11 +219,11 @@ function RegulatoryTile({ onAskAI }: { onAskAI?: () => void }) {
       <div className="mt-4 pt-3 border-t border-border">
         <div className="flex justify-between text-sm">
           <span className="text-muted-foreground">LCR Surplus</span>
-          <span className="font-medium text-status-green">+$1.2B</span>
+          <span className="font-medium text-status-green">+${data.lcrSurplus.toFixed(1)}B</span>
         </div>
         <div className="flex justify-between text-sm mt-1.5">
           <span className="text-muted-foreground">Total HQLA</span>
-          <span className="font-medium text-foreground">$4.8B</span>
+          <span className="font-medium text-foreground">${data.totalHQLA.toFixed(1)}B</span>
         </div>
       </div>
     </MetricCard>
@@ -225,25 +234,23 @@ function RegulatoryTile({ onAskAI }: { onAskAI?: () => void }) {
 /*  Tile 4 - Core Deposits                            */
 /* -------------------------------------------------- */
 
-const depositData = [
-  { week: "W-4", value: 43.2 },
-  { week: "W-3", value: 43.0 },
-  { week: "W-2", value: 42.8 },
-  { week: "W-1", value: 42.6 },
-  { week: "Now", value: 42.5 },
-]
-
-function CoreDepositsTile({ onAskAI }: { onAskAI?: () => void }) {
+function CoreDepositsTile({
+  data,
+  onAskAI,
+}: {
+  data: DashboardData["coreDeposits"]
+  onAskAI?: () => void
+}) {
   return (
     <MetricCard borderColor="hsl(25,95%,53%)" title="Core Deposits" onAskAI={onAskAI}>
       <div className="flex items-baseline gap-1.5">
-        <span className="text-3xl font-bold text-foreground">$42.5</span>
+        <span className="text-3xl font-bold text-foreground">${data.total.toFixed(1)}</span>
         <span className="text-lg text-muted-foreground font-medium">B</span>
       </div>
-      <ChangeIndicator value="-0.8%" suffix="WoW" positive={false} />
+      <ChangeIndicator value={`${data.changePercent}%`} suffix="WoW" positive={data.changePercent > 0} />
       <div className="h-20 mt-3">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={depositData} margin={{ bottom: 2, left: 4, right: 4 }}>
+          <AreaChart data={data.trend} margin={{ bottom: 2, left: 4, right: 4 }}>
             <XAxis dataKey="week" tick={{ fill: "#94a3b8", fontSize: 9 }} axisLine={false} tickLine={false} />
             <YAxis domain={[42, 43.5]} tick={{ fill: "#94a3b8", fontSize: 9 }} axisLine={false} tickLine={false} width={34} tickFormatter={(v: number) => `$${v}B`} />
             <Tooltip content={<MiniTooltip unit="$" />} />
@@ -266,32 +273,30 @@ function CoreDepositsTile({ onAskAI }: { onAskAI?: () => void }) {
 /*  Tile 5 - Active Alerts (with drill-down)          */
 /* -------------------------------------------------- */
 
-const allAlerts = [
-  { label: "Fed Position Review", severity: "critical" as const, detail: "Balance approaching minimum threshold at 3PM cutoff", value: "Review 3PM" },
-  { label: "Uninsured Deposit Spike", severity: "critical" as const, detail: "Uninsured deposits increased $500M, nearing 35% policy limit", value: "+$500M" },
-  { label: "CD Maturities Cluster", severity: "warning" as const, detail: "$200M in CDs maturing within next 7 days", value: "$200M 7d" },
-  { label: "Brokered Deposit Concentration", severity: "warning" as const, detail: "Brokered deposits now 9.9% of total, policy limit 10%", value: "9.9%" },
-  { label: "FHLB Advance Maturing", severity: "info" as const, detail: "$150M FHLB advance maturing in 5 business days", value: "$150M 5d" },
-]
-
-const severityStyles = {
+const severityStyles: Record<AlertSeverity, { dot: string; text: string; badge: string }> = {
   critical: { dot: "bg-status-red", text: "text-status-red", badge: "bg-status-red/10 text-status-red border-status-red/20" },
   warning: { dot: "bg-status-yellow", text: "text-status-yellow", badge: "bg-status-yellow/10 text-status-yellow border-status-yellow/20" },
   info: { dot: "bg-status-blue", text: "text-status-blue", badge: "bg-status-blue/10 text-status-blue border-status-blue/20" },
 }
 
-function AlertsTile({ onAskAI }: { onAskAI?: () => void }) {
+function AlertsTile({
+  data,
+  onAskAI,
+}: {
+  data: DashboardData["alerts"]
+  onAskAI?: () => void
+}) {
   const [expanded, setExpanded] = useState(false)
-  const displayAlerts = expanded ? allAlerts : allAlerts.slice(0, 3)
+  const displayAlerts = expanded ? data.alerts : data.alerts.slice(0, 3)
 
   return (
     <MetricCard borderColor="hsl(0,84%,60%)" title="Active Alerts" onAskAI={onAskAI}>
       <div className="flex items-baseline gap-1.5">
-        <span className="text-3xl font-bold text-foreground">{allAlerts.length}</span>
+        <span className="text-3xl font-bold text-foreground">{data.alerts.length}</span>
       </div>
       <div className="flex items-center gap-2 text-xs mt-2 text-muted-foreground">
         <AlertTriangle className="w-3.5 h-3.5 text-status-red" />
-        <span>2 Critical, 2 Warning, 1 Info</span>
+        <span>{data.criticalCount} Critical, {data.warningCount} Warning, {data.infoCount} Info</span>
       </div>
       <div className="mt-4 space-y-0">
         {displayAlerts.map((alert, i) => {
@@ -322,7 +327,7 @@ function AlertsTile({ onAskAI }: { onAskAI?: () => void }) {
           </>
         ) : (
           <>
-            View all {allAlerts.length} alerts <ChevronDown className="w-3 h-3" />
+            View all {data.alerts.length} alerts <ChevronDown className="w-3 h-3" />
           </>
         )}
       </button>
@@ -334,30 +339,6 @@ function AlertsTile({ onAskAI }: { onAskAI?: () => void }) {
 /*  Insights Section - compact color-coded list       */
 /* -------------------------------------------------- */
 
-type InsightSeverity = "green" | "blue" | "yellow" | "red"
-
-interface InsightItem {
-  badge: string
-  severity: InsightSeverity
-  text: string
-  portfolio: string
-  assignees: string[]
-  status: "Acknowledged" | "Under Review" | "Action Required" | "Escalated"
-}
-
-const insights: InsightItem[] = [
-  { badge: "LCR 127%", severity: "green", text: "Well above the 100% regulatory minimum. Strong liquidity cushion.", portfolio: "Liquidity Coverage", assignees: ["Treasury Ops", "Risk Management"], status: "Acknowledged" },
-  { badge: "NSFR 115%", severity: "blue", text: "Conservative lending relative to deposits. Low funding risk.", portfolio: "Net Stable Funding", assignees: ["ALM Team"], status: "Under Review" },
-  { badge: "ILST 30d", severity: "yellow", text: "Meets requirements but limited buffer. Monitor closely.", portfolio: "Stress Testing", assignees: ["Risk Management", "CFO Office"], status: "Action Required" },
-  { badge: "CD Maturity", severity: "yellow", text: "$200M in CDs maturing within 7 days. Renewal strategy needed.", portfolio: "Deposit Management", assignees: ["Treasury Ops", "Funding Desk"], status: "Action Required" },
-  { badge: "Uninsured 34.8%", severity: "red", text: "Uninsured deposits nearing 35% policy limit. Concentration risk elevated.", portfolio: "Deposit Concentration", assignees: ["Risk Management", "CFO Office", "Board Risk Committee"], status: "Escalated" },
-  { badge: "FHLB $150M", severity: "blue", text: "FHLB advance of $150M maturing in 5 business days.", portfolio: "Wholesale Funding", assignees: ["Funding Desk"], status: "Acknowledged" },
-  { badge: "Fed Position", severity: "red", text: "Federal Reserve balance approaching minimum threshold before 3PM cutoff.", portfolio: "Federal Reserve", assignees: ["Treasury Ops", "Payments Team"], status: "Action Required" },
-  { badge: "Brokered 9.9%", severity: "yellow", text: "Brokered deposits at 9.9%, approaching 10% policy limit.", portfolio: "Deposit Management", assignees: ["Treasury Ops", "Risk Management"], status: "Under Review" },
-  { badge: "Rate Risk", severity: "blue", text: "Interest rate sensitivity gap widened by $120M. Model update recommended.", portfolio: "Interest Rate Risk", assignees: ["ALM Team", "Risk Management"], status: "Under Review" },
-  { badge: "Collateral", severity: "green", text: "Pledged collateral coverage at 112%. Adequate margin maintained.", portfolio: "Collateral Management", assignees: ["Treasury Ops"], status: "Acknowledged" },
-]
-
 const severityConfig: Record<InsightSeverity, { border: string; bg: string; badgeBg: string; badgeText: string; dotColor: string }> = {
   green: { border: "border-l-status-green", bg: "hover:bg-status-green/5", badgeBg: "bg-status-green/10", badgeText: "text-status-green", dotColor: "bg-status-green" },
   blue: { border: "border-l-status-blue", bg: "hover:bg-status-blue/5", badgeBg: "bg-status-blue/10", badgeText: "text-status-blue", dotColor: "bg-status-blue" },
@@ -365,55 +346,48 @@ const severityConfig: Record<InsightSeverity, { border: string; bg: string; badg
   red: { border: "border-l-status-red", bg: "hover:bg-status-red/5", badgeBg: "bg-status-red/10", badgeText: "text-status-red", dotColor: "bg-status-red" },
 }
 
-const statusConfig: Record<string, { icon: React.ElementType; color: string }> = {
+const statusConfig: Record<InsightStatus, { icon: React.ElementType; color: string }> = {
   "Acknowledged": { icon: CheckCircle2, color: "text-status-green" },
   "Under Review": { icon: Eye, color: "text-status-blue" },
   "Action Required": { icon: AlertCircle, color: "text-status-yellow" },
   "Escalated": { icon: AlertTriangle, color: "text-status-red" },
 }
 
-function InsightsSection() {
+function InsightsSection({ data }: { data: DashboardData["insights"] }) {
   const [expandedIdx, setExpandedIdx] = useState<number | null>(null)
   const [showAll, setShowAll] = useState(false)
-  const displayed = showAll ? insights : insights.slice(0, 5)
-
-  const countByStatus = {
-    escalated: insights.filter((i) => i.status === "Escalated").length,
-    actionRequired: insights.filter((i) => i.status === "Action Required").length,
-    underReview: insights.filter((i) => i.status === "Under Review").length,
-    acknowledged: insights.filter((i) => i.status === "Acknowledged").length,
-  }
+  const displayed = showAll ? data.items : data.items.slice(0, 5)
 
   return (
     <div className="bg-card rounded-lg border border-border overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between px-5 py-4 border-b border-border gap-2">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
             <Bell className="w-4 h-4 text-primary" />
             <h3 className="text-sm font-semibold text-foreground">Insights & Alerts</h3>
           </div>
           <span className="bg-primary/10 text-primary text-xs font-bold px-2 py-0.5 rounded-full">
-            {insights.length}
+            {data.items.length}
           </span>
         </div>
-        <div className="flex items-center gap-3">
-          {countByStatus.escalated > 0 && (
+        <div className="flex items-center gap-3 flex-wrap">
+          {data.countByStatus.escalated > 0 && (
             <span className="flex items-center gap-1 text-xs font-medium text-status-red">
               <span className="w-1.5 h-1.5 rounded-full bg-status-red" />
-              {countByStatus.escalated} Escalated
+              {data.countByStatus.escalated} Escalated
             </span>
           )}
-          {countByStatus.actionRequired > 0 && (
+          {data.countByStatus.actionRequired > 0 && (
             <span className="flex items-center gap-1 text-xs font-medium text-status-yellow">
               <span className="w-1.5 h-1.5 rounded-full bg-status-yellow" />
-              {countByStatus.actionRequired} Action Required
+              {data.countByStatus.actionRequired} Action Required
             </span>
           )}
-          {countByStatus.underReview > 0 && (
+          {data.countByStatus.underReview > 0 && (
             <span className="flex items-center gap-1 text-xs font-medium text-status-blue">
               <span className="w-1.5 h-1.5 rounded-full bg-status-blue" />
-              {countByStatus.underReview} Review
+              {data.countByStatus.underReview} Review
             </span>
           )}
         </div>
@@ -427,10 +401,10 @@ function InsightsSection() {
           const StatusIcon = statusConfig[insight.status].icon
 
           return (
-            <div key={idx}>
+            <div key={insight.id}>
               <button
                 onClick={() => setExpandedIdx(isExpanded ? null : idx)}
-                className={`w-full text-left flex items-center gap-4 px-5 py-3 border-l-[3px] transition-colors ${sev.border} ${sev.bg} ${isExpanded ? "bg-muted/50" : ""}`}
+                className={`w-full text-left flex items-center gap-3 md:gap-4 px-4 md:px-5 py-3 border-l-[3px] transition-colors ${sev.border} ${sev.bg} ${isExpanded ? "bg-muted/50" : ""}`}
               >
                 <span className={`text-[11px] font-bold px-2 py-0.5 rounded ${sev.badgeBg} ${sev.badgeText} whitespace-nowrap`}>
                   {insight.badge}
@@ -446,7 +420,7 @@ function InsightsSection() {
               </button>
 
               {isExpanded && (
-                <div className={`px-5 py-3.5 border-l-[3px] bg-muted/30 ${sev.border}`}>
+                <div className={`px-4 md:px-5 py-3.5 border-l-[3px] bg-muted/30 ${sev.border}`}>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                       <span className="text-[11px] uppercase tracking-wider text-muted-foreground font-medium">Portfolio</span>
@@ -478,7 +452,7 @@ function InsightsSection() {
       </div>
 
       {/* Show more/less */}
-      {insights.length > 5 && (
+      {data.items.length > 5 && (
         <div className="px-5 py-3 border-t border-border">
           <button
             onClick={() => { setShowAll(!showAll); setExpandedIdx(null) }}
@@ -487,7 +461,7 @@ function InsightsSection() {
             {showAll ? (
               <>Show less <ChevronUp className="w-3.5 h-3.5" /></>
             ) : (
-              <>View all {insights.length} alerts <ChevronDown className="w-3.5 h-3.5" /></>
+              <>View all {data.items.length} alerts <ChevronDown className="w-3.5 h-3.5" /></>
             )}
           </button>
         </div>
@@ -500,22 +474,22 @@ function InsightsSection() {
 /*  Executive Tiles Section                           */
 /* -------------------------------------------------- */
 
-export function ExecutiveTiles({ onNavigateToConversation }: { onNavigateToConversation?: () => void }) {
+export function ExecutiveTiles({ data, onNavigateToConversation }: ExecutiveTilesProps) {
+  // Default data for when data is not yet loaded
+  if (!data) return null
+
   return (
     <section aria-label="Executive Metrics" className="space-y-5">
       {/* Insights first */}
-      <InsightsSection />
+      <InsightsSection data={data.insights} />
 
-      <div className="flex items-center gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3">
         <h2 className="text-base font-semibold text-foreground">Treasury Overview</h2>
-        <span className="bg-muted text-muted-foreground px-2.5 py-1 rounded-md text-xs font-medium uppercase tracking-wide">
-          Last 2 Days
-        </span>
         {onNavigateToConversation && (
           <button
             onClick={onNavigateToConversation}
             title="Ask AI about these metrics"
-            className="ml-auto flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 hover:bg-primary/20 px-3 py-1.5 rounded-lg transition-colors"
+            className="sm:ml-auto flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 hover:bg-primary/20 px-3 py-1.5 rounded-lg transition-colors w-fit"
           >
             <MessageSquare className="w-3.5 h-3.5" />
             Ask AI
@@ -525,15 +499,15 @@ export function ExecutiveTiles({ onNavigateToConversation }: { onNavigateToConve
 
       {/* Row 1: 3 cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <FedReserveTile onAskAI={onNavigateToConversation} />
-        <ConsolidatedCashTile onAskAI={onNavigateToConversation} />
-        <CoreDepositsTile onAskAI={onNavigateToConversation} />
+        <FedReserveTile data={data.fedReserve} onAskAI={onNavigateToConversation} />
+        <ConsolidatedCashTile data={data.consolidatedCash} onAskAI={onNavigateToConversation} />
+        <CoreDepositsTile data={data.coreDeposits} onAskAI={onNavigateToConversation} />
       </div>
 
       {/* Row 2: 2 cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <RegulatoryTile onAskAI={onNavigateToConversation} />
-        <AlertsTile onAskAI={onNavigateToConversation} />
+        <RegulatoryTile data={data.regulatory} onAskAI={onNavigateToConversation} />
+        <AlertsTile data={data.alerts} onAskAI={onNavigateToConversation} />
       </div>
     </section>
   )

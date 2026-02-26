@@ -19,6 +19,12 @@ import {
 } from "./panel-components"
 import { ChartTooltip } from "./chart-tooltip"
 import { Clock } from "lucide-react"
+import type { Timeframe } from "./header"
+
+// Props interface - timeframe passed for future backend integration
+interface FundingCapacityTabProps {
+  timeframe?: Timeframe
+}
 
 /* -------------------------------------------------- */
 /*  Chart data                                        */
@@ -66,7 +72,9 @@ const actions = [
 /*  Component                                         */
 /* -------------------------------------------------- */
 
-export function FundingCapacityTab() {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function FundingCapacityTab({ timeframe = "2d" }: FundingCapacityTabProps) {
+  // timeframe will be used when connecting to backend API
   return (
     <div className="space-y-5">
       {/* Row 1: Wholesale Funding Sources */}
