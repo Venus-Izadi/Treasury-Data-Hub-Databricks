@@ -167,6 +167,13 @@ export function Sidebar({ activePage, onNavigate, isOpen = false, onClose }: Sid
               <LogOut className="w-4 h-4" />
             </button>
           </div>
+
+          {/* Powered by badge */}
+          <div className="px-3 pt-3 mt-2 border-t border-border">
+            <div className="text-[10px] text-muted-foreground text-center">
+              Powered by <span className="font-semibold text-[#FF3621]">Databricks</span>
+            </div>
+          </div>
         </div>
       </aside>
     </>
