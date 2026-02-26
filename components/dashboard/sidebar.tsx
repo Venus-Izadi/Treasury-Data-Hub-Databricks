@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { cn } from "@/lib/utils"
 import {
   LayoutDashboard,
@@ -9,7 +10,6 @@ import {
   MessageSquare,
   Settings,
   LogOut,
-  Activity,
 } from "lucide-react"
 
 export type SidebarPage =
@@ -51,12 +51,16 @@ export function Sidebar({ activePage, onNavigate }: SidebarProps) {
     <aside className="w-[220px] shrink-0 bg-card border-r border-border flex flex-col h-screen sticky top-0">
       {/* Logo */}
       <div className="px-5 py-5 flex items-center gap-3">
-        <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center">
-          <Activity className="w-5 h-5 text-primary-foreground" />
-        </div>
+        <Image
+          src="/images/databank-logo.png"
+          alt="Databank Logo"
+          width={40}
+          height={40}
+          className="w-10 h-10 object-contain"
+        />
         <div>
-          <div className="text-[15px] font-bold text-foreground leading-tight">The Pulse</div>
-          <div className="text-xs text-muted-foreground leading-tight">Aura Bank</div>
+          <div className="text-[15px] font-bold text-foreground leading-tight">Databank</div>
+          <div className="text-xs text-muted-foreground leading-tight">Treasury Hub</div>
         </div>
       </div>
 
