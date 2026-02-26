@@ -31,16 +31,36 @@ import {
 function MetricCard({
   borderColor,
   children,
+  title,
+  onAskAI,
 }: {
   borderColor: string
   children: React.ReactNode
+  title: string
+  onAskAI?: () => void
 }) {
   return (
     <div
       className="bg-card rounded-lg border border-border overflow-hidden"
       style={{ borderTop: `3px solid ${borderColor}` }}
     >
-      <div className="p-5">{children}</div>
+      <div className="p-5">
+        <div className="flex items-start justify-between gap-2 mb-1.5">
+          <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+            {title}
+          </div>
+          {onAskAI && (
+            <button
+              onClick={onAskAI}
+              title={`Ask AI about ${title}`}
+              className="shrink-0 p-1 rounded hover:bg-primary/10 text-muted-foreground hover:text-primary transition-colors"
+            >
+              <MessageSquare className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
+        {children}
+      </div>
     </div>
   )
 }
@@ -110,13 +130,10 @@ const fedData = [
   { time: "EOD", actual: 2.52, forecast: 2.52 },
 ]
 
-function FedReserveTile() {
+function FedReserveTile({ onAskAI }: { onAskAI?: () => void }) {
   return (
-    <MetricCard borderColor="hsl(152,55%,41%)">
-      <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-        Fed Reserve Balance
-      </div>
-      <div className="flex items-baseline gap-1.5 mt-1.5">
+    <MetricCard borderColor="hsl(152,55%,41%)" title="Fed Reserve Balance" onAskAI={onAskAI}>
+      <div className="flex items-baseline gap-1.5">
         <span className="text-3xl font-bold text-foreground">$2.45</span>
         <span className="text-lg text-muted-foreground font-medium">B</span>
       </div>
@@ -140,13 +157,10 @@ function FedReserveTile() {
 /*  Tile 2 - Consolidated Cash                        */
 /* -------------------------------------------------- */
 
-function ConsolidatedCashTile() {
+function ConsolidatedCashTile({ onAskAI }: { onAskAI?: () => void }) {
   return (
-    <MetricCard borderColor="hsl(152,55%,41%)">
-      <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-        Consolidated Cash
-      </div>
-      <div className="flex items-baseline gap-1.5 mt-1.5">
+    <MetricCard borderColor="hsl(152,55%,41%)" title="Consolidated Cash" onAskAI={onAskAI}>
+      <div className="flex items-baseline gap-1.5">
         <span className="text-3xl font-bold text-foreground">$8.72</span>
         <span className="text-lg text-muted-foreground font-medium">B</span>
       </div>
@@ -173,13 +187,10 @@ function ConsolidatedCashTile() {
 /*  Tile 3 - Regulatory Headroom                      */
 /* -------------------------------------------------- */
 
-function RegulatoryTile() {
+function RegulatoryTile({ onAskAI }: { onAskAI?: () => void }) {
   return (
-    <MetricCard borderColor="hsl(25,95%,53%)">
-      <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-        Regulatory Headroom
-      </div>
-      <div className="flex items-center gap-4 mt-3">
+    <MetricCard borderColor="hsl(25,95%,53%)" title="Regulatory Headroom" onAskAI={onAskAI}>
+      <div className="flex items-center gap-4 mt-1">
         {[
           { label: "LCR", value: "127%", ok: true },
           { label: "NSFR", value: "115%", ok: true },
@@ -222,13 +233,10 @@ const depositData = [
   { week: "Now", value: 42.5 },
 ]
 
-function CoreDepositsTile() {
+function CoreDepositsTile({ onAskAI }: { onAskAI?: () => void }) {
   return (
-    <MetricCard borderColor="hsl(25,95%,53%)">
-      <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-        Core Deposits
-      </div>
-      <div className="flex items-baseline gap-1.5 mt-1.5">
+    <MetricCard borderColor="hsl(25,95%,53%)" title="Core Deposits" onAskAI={onAskAI}>
+      <div className="flex items-baseline gap-1.5">
         <span className="text-3xl font-bold text-foreground">$42.5</span>
         <span className="text-lg text-muted-foreground font-medium">B</span>
       </div>
@@ -272,16 +280,13 @@ const severityStyles = {
   info: { dot: "bg-status-blue", text: "text-status-blue", badge: "bg-status-blue/10 text-status-blue border-status-blue/20" },
 }
 
-function AlertsTile() {
+function AlertsTile({ onAskAI }: { onAskAI?: () => void }) {
   const [expanded, setExpanded] = useState(false)
   const displayAlerts = expanded ? allAlerts : allAlerts.slice(0, 3)
 
   return (
-    <MetricCard borderColor="hsl(0,84%,60%)">
-      <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-        Active Alerts
-      </div>
-      <div className="flex items-baseline gap-1.5 mt-1.5">
+    <MetricCard borderColor="hsl(0,84%,60%)" title="Active Alerts" onAskAI={onAskAI}>
+      <div className="flex items-baseline gap-1.5">
         <span className="text-3xl font-bold text-foreground">{allAlerts.length}</span>
       </div>
       <div className="flex items-center gap-2 text-xs mt-2 text-muted-foreground">
@@ -520,15 +525,15 @@ export function ExecutiveTiles({ onNavigateToConversation }: { onNavigateToConve
 
       {/* Row 1: 3 cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <FedReserveTile />
-        <ConsolidatedCashTile />
-        <CoreDepositsTile />
+        <FedReserveTile onAskAI={onNavigateToConversation} />
+        <ConsolidatedCashTile onAskAI={onNavigateToConversation} />
+        <CoreDepositsTile onAskAI={onNavigateToConversation} />
       </div>
 
       {/* Row 2: 2 cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <RegulatoryTile />
-        <AlertsTile />
+        <RegulatoryTile onAskAI={onNavigateToConversation} />
+        <AlertsTile onAskAI={onNavigateToConversation} />
       </div>
     </section>
   )
