@@ -62,16 +62,24 @@ export function Header({
   onMenuClick,
 }: HeaderProps) {
   const [open, setOpen] = useState(false)
-  const [currentTime, setCurrentTime] = useState<Date>(new Date())
+  const [currentTime, setCurrentTime] = useState<Date | null>(null)
+  const [mounted, setMounted] = useState(false)
   const activeLabel = timeframes.find((t) => t.value === timeframe)?.label ?? "Today"
+
+  // Set mounted state and initial time on client only
+  useEffect(() => {
+    setMounted(true)
+    setCurrentTime(new Date())
+  }, [])
 
   // Update current time every minute
   useEffect(() => {
+    if (!mounted) return
     const interval = setInterval(() => {
       setCurrentTime(new Date())
     }, 60000)
     return () => clearInterval(interval)
-  }, [])
+  }, [mounted])
 
   // Use lastUpdated if provided, otherwise use current time
   const displayTime = lastUpdated ?? currentTime
@@ -130,9 +138,9 @@ export function Header({
           )}
         </div>
 
-        {/* Timestamp - hidden on small screens */}
+        {/* Timestamp - hidden on small screens, only render after mount to avoid hydration mismatch */}
         <div className="hidden md:flex items-center gap-2 bg-muted px-3.5 py-2 rounded-lg text-sm text-muted-foreground">
-          <span>As of {formatTimestamp(displayTime)}</span>
+          <span>{mounted && displayTime ? `As of ${formatTimestamp(displayTime)}` : "Loading..."}</span>
         </div>
 
         {/* Refresh button */}
