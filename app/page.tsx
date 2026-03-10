@@ -3,15 +3,28 @@
 import { useState } from "react"
 import { LCRSidebar, type LCRPage } from '@/components/lcr-sidebar'
 import { LCRHeader } from '@/components/lcr-header'
-import DashboardLayout from '@/components/dashboard-layout'
-import ExecutiveSummary from '@/components/executive-summary'
-import LCRTrends from '@/components/lcr-trends'
+import { LCRDashboard } from '@/components/lcr-dashboard'
+import { ExecutiveSummaryPage } from '@/components/executive-summary-page'
+import { RisksPage } from '@/components/risks-page'
+import { ForecastsPage } from '@/components/forecasts-page'
 import { LCRConversation } from '@/components/lcr-conversation'
 
 const pageMeta: Record<LCRPage, { title: string; subtitle: string }> = {
   dashboard: {
     title: "LCR Dashboard",
     subtitle: "Intraday Liquidity Coverage Metrics and Analysis",
+  },
+  executive: {
+    title: "Executive Summary",
+    subtitle: "Key insights and top priorities",
+  },
+  risks: {
+    title: "Risk Analysis",
+    subtitle: "Current threats and compliance concerns",
+  },
+  forecasts: {
+    title: "Forecasts",
+    subtitle: "Projected LCR scenarios and outlooks",
   },
   conversation: {
     title: "Conversation",
@@ -57,12 +70,10 @@ export default function Page() {
         />
         
         <main className="flex-1 px-4 md:px-8 py-4 md:py-6 overflow-y-auto">
-          {activePage === "dashboard" && (
-            <DashboardLayout>
-              <ExecutiveSummary />
-              <LCRTrends />
-            </DashboardLayout>
-          )}
+          {activePage === "dashboard" && <LCRDashboard onNavigate={handleNavigate} />}
+          {activePage === "executive" && <ExecutiveSummaryPage />}
+          {activePage === "risks" && <RisksPage />}
+          {activePage === "forecasts" && <ForecastsPage />}
           {activePage === "conversation" && <LCRConversation />}
         </main>
       </div>

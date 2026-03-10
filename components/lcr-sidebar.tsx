@@ -8,14 +8,27 @@ import {
   Settings,
   LogOut,
   X,
+  AlertTriangle,
+  TrendingUp,
+  FileText,
+  BarChart3,
 } from "lucide-react"
 
-export type LCRPage = "dashboard" | "conversation"
+export type LCRPage = "dashboard" | "executive" | "risks" | "forecasts" | "conversation"
 
 const navSections = [
   {
+    heading: "Overview",
     items: [
       { id: "dashboard" as const, label: "Dashboard", icon: LayoutDashboard },
+    ],
+  },
+  {
+    heading: "Analysis",
+    items: [
+      { id: "executive" as const, label: "Executive Summary", icon: FileText },
+      { id: "risks" as const, label: "Risks", icon: AlertTriangle },
+      { id: "forecasts" as const, label: "Forecasts", icon: TrendingUp },
     ],
   },
   {

@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { Menu, RefreshCw } from 'lucide-react'
+import { Menu, RefreshCw, Bell } from 'lucide-react'
 
 interface LCRHeaderProps {
   title: string
@@ -21,8 +21,8 @@ export function LCRHeader({
   onMenuClick 
 }: LCRHeaderProps) {
   return (
-    <header className="bg-card border-b border-border">
-      <div className="px-4 md:px-6 py-4 flex items-center justify-between">
+    <header className="bg-card border-b border-border sticky top-0 z-30">
+      <div className="px-4 md:px-8 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           {/* Mobile menu button */}
           <button
@@ -34,21 +34,26 @@ export function LCRHeader({
           </button>
           
           <div>
-            <h1 className="text-lg font-semibold text-foreground">{title}</h1>
+            <h1 className="text-xl font-bold text-foreground tracking-tight">{title}</h1>
             <p className="text-sm text-muted-foreground">{subtitle}</p>
           </div>
         </div>
         
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
           {lastUpdated && (
-            <span className="text-xs text-muted-foreground hidden md:block">
+            <span className="text-xs text-muted-foreground hidden md:flex items-center gap-1.5 bg-secondary px-3 py-1.5 rounded-lg">
+              <span className="w-1.5 h-1.5 rounded-full bg-status-green animate-pulse" />
               Last updated: {lastUpdated}
             </span>
           )}
+          <button className="p-2.5 hover:bg-secondary rounded-lg transition-colors relative">
+            <Bell className="w-5 h-5 text-muted-foreground" />
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-status-red" />
+          </button>
           <button 
             onClick={onRefresh}
             disabled={isRefreshing}
-            className="p-2 hover:bg-secondary rounded-lg transition-colors disabled:opacity-50"
+            className="p-2.5 hover:bg-secondary rounded-lg transition-colors disabled:opacity-50"
           >
             <RefreshCw className={`w-5 h-5 text-muted-foreground ${isRefreshing ? 'animate-spin' : ''}`} />
           </button>
