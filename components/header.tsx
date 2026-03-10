@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import Image from 'next/image'
 import { MessageCircle, Settings } from 'lucide-react'
 
 export default function Header() {
@@ -8,11 +9,17 @@ export default function Header() {
     <header className="bg-card border-b border-border">
       <div className="px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-primary-foreground font-bold text-lg">
-            AB
+          <div className="w-10 h-10 relative">
+            <Image
+              src="/images/databank-logo.png"
+              alt="Treasury Data Hub Logo"
+              width={40}
+              height={40}
+              className="w-full h-full object-contain"
+            />
           </div>
           <div>
-            <h1 className="text-lg font-semibold text-foreground">Aura Bank</h1>
+            <h1 className="text-lg font-semibold text-foreground">Treasury Data Hub</h1>
             <p className="text-sm text-muted-foreground">Intraday Liquidity Coverage Metrics and Analysis</p>
           </div>
         </div>
